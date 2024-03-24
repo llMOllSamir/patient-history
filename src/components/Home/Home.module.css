@@ -1,0 +1,64 @@
+.home {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+    url(../../assets/images/image-03.png);
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-position: top right;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 600px) {
+  .home {
+    background-size: cover;
+  }
+}
+
+.form {
+  animation: alternate 2s fadein;
+}
+
+@keyframes fadein {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fadeInSlide {
+  animation: slidfade alternate 0.5s;
+  animation-fill-mode: both;
+}
+.fadeOutSlide {
+  animation: slidfadeout alternate 0.5s;
+  animation-fill-mode: both;
+}
+@keyframes slidfade {
+  from {
+    width: 0;
+    overflow: hidden;
+  }
+  to {
+    width: 25%;
+    overflow: auto;
+  }
+}
+
+@keyframes slidfadeout {
+  from {
+    width: 25%;
+    overflow: auto;
+  }
+  to {
+    width: 0%;
+    overflow: hidden;
+    padding: 0;
+  }
+}

@@ -1,0 +1,11 @@
+.login {
+  background: url(../../assets/images/image-02.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
