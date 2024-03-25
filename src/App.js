@@ -10,6 +10,9 @@ import PersonalInformation from "./components/PersonalInformation/PersonalInform
 import RouteOutlet from "./components/RouteOutlet/RouteOutlet";
 import AddPatient from "./components/AddPatient/AddPatient";
 import UpdatePatient from "./components/UpdatePatient/UpdatePatient";
+import GeneralExamination from "./components/GeneralExamination/GeneralExamination";
+import AddUpdateGeneralExamination from "./components/GeneralExamination/AddUpdateGeneralExamination";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const routes = createBrowserRouter([
@@ -46,9 +49,15 @@ function App() {
                 />
               ),
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdateGeneralExamination state="add" />,
+                },
+                {
+                  path: "update/:id",
+                  element: <AddUpdateGeneralExamination />,
+                },
+                { path: ":id", element: <GeneralExamination /> },
               ],
             },
             {
@@ -147,7 +156,12 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={routes} />;
+  return (
+    <>
+      <RouterProvider router={routes} />
+      <ToastContainer />
+    </>
+  );
 }
 
 export default App;
