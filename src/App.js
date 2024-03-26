@@ -13,6 +13,8 @@ import UpdatePatient from "./components/UpdatePatient/UpdatePatient";
 import GeneralExamination from "./components/GeneralExamination/GeneralExamination";
 import AddUpdateGeneralExamination from "./components/GeneralExamination/AddUpdateGeneralExamination";
 import { ToastContainer } from "react-toastify";
+import PatientObstetricsHistory from "./components/PatientObstetricsHistory/PatientObstetricsHistory";
+import AddUpdateObstetricsHistory from "./components/PatientObstetricsHistory/AddUpdateObstetricsHistory";
 
 function App() {
   const routes = createBrowserRouter([
@@ -83,9 +85,12 @@ function App() {
                 />
               ),
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdateObstetricsHistory state="add" />,
+                },
+                { path: "update/:id", element: <AddUpdateObstetricsHistory /> },
+                { path: ":id", element: <PatientObstetricsHistory /> },
               ],
             },
             {
