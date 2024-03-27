@@ -58,13 +58,10 @@ export const addObstetrics = createAsyncThunk(
   }
 );
 
-const obstetricsSliceSlice = createSlice({
+const obstetricsSlice = createSlice({
   name: "obstetrics",
   initialState,
   reducers: {
-    addObstetricsData: (state, { payload }) => {
-      state.newGeneralExamination = payload;
-    },
     clearObstetricsData: (state) => {
       Object.assign(state, initialState);
     },
@@ -100,5 +97,5 @@ const obstetricsSliceSlice = createSlice({
 });
 
 export const { addObstetricsData, clearObstetricsData } =
-  obstetricsSliceSlice.actions;
-export default obstetricsSliceSlice.reducer;
+  obstetricsSlice.actions;
+export default obstetricsSlice.reducer;
