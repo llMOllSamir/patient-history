@@ -82,7 +82,7 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
   }, [dispatech, id]);
 
   useEffect(() => {
-    // Set initial values for formik after obstetrics-history data is fetched
+    // Set initial values for formik after osteoporosis data is fetched
     if (osteoporosis) {
       formik.setValues({
         age: osteoporosis.age || "",
@@ -93,6 +93,7 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
         recommendations: osteoporosis.recommendations || "",
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [osteoporosis]);
 
   if (loading) {

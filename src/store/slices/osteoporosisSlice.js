@@ -74,7 +74,7 @@ const osteoporosisSlice = createSlice({
     builder.addCase(addOsteoporosis.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
-      state.osteoporosis = payload.obstetric;
+      state.osteoporosis = payload.test;
     });
     builder.addCase(addOsteoporosis.rejected, (state) => {
       state.loading = false;
