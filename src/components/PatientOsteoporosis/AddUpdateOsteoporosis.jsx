@@ -36,7 +36,6 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
       age: osteoporosis.age || "",
       weight: osteoporosis.weight || "",
       current_oestrogen_use: osteoporosis.current_oestrogen_use ? "yes" : "no",
-      recommendations: osteoporosis.recommendations || "",
     },
     validationSchema,
     onSubmit: (values) => {
@@ -90,7 +89,6 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
         current_oestrogen_use: osteoporosis.current_oestrogen_use
           ? "Yes"
           : "No",
-        recommendations: osteoporosis.recommendations || "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,13 +149,6 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
               ))}
             </select>
           </div>
-
-          <InputInfo
-            form={formik}
-            name={"recommendations"}
-            title={"recommendations"}
-            type="text"
-          />
         </div>
         <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
           <button
