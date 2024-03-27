@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { data: null, patientCode: null };
+const initialState = { data: null, patientCode: null, id: null };
 
 const patientSlice = createSlice({
   name: "patient",
@@ -17,9 +17,16 @@ const patientSlice = createSlice({
     emptyPatientCode: (state, { payload }) => {
       state.patientCode = null;
     },
+    setPatientId: (state, { payload }) => {
+      state.id = payload.id;
+    },
   },
 });
 
-export const { fixPatientCode, emptyPatientCode, setPatientData } =
-  patientSlice.actions;
+export const {
+  fixPatientCode,
+  emptyPatientCode,
+  setPatientData,
+  setPatientId,
+} = patientSlice.actions;
 export default patientSlice.reducer;
