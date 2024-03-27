@@ -40,7 +40,10 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
     },
     validationSchema,
     onSubmit: (values) => {
-      values.current_oestrogen_use = Boolean(values.current_oestrogen_use);
+      values.current_oestrogen_use =
+        values.current_oestrogen_use.toLocaleLowerCase() === "yes"
+          ? true
+          : false;
       if (state === "update") {
         dispatech(
           updateOsteoporosis({
@@ -85,8 +88,8 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
         age: osteoporosis.age || "",
         weight: osteoporosis.weight || "",
         current_oestrogen_use: osteoporosis.current_oestrogen_use
-          ? "yes"
-          : "no",
+          ? "Yes"
+          : "No",
         recommendations: osteoporosis.recommendations || "",
       });
     }
@@ -140,7 +143,7 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
                 <option
                   key={index}
                   className="capitalize cursor-pointer"
-                  value={state === "yes" ? true : false}
+                  value={state}
                 >
                   {state}
                 </option>
