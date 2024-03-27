@@ -15,6 +15,8 @@ import AddUpdateGeneralExamination from "./components/GeneralExamination/AddUpda
 import { ToastContainer } from "react-toastify";
 import PatientObstetricsHistory from "./components/PatientObstetricsHistory/PatientObstetricsHistory";
 import AddUpdateObstetricsHistory from "./components/PatientObstetricsHistory/AddUpdateObstetricsHistory";
+import PatientOsteoporosisHistory from "./components/PatientOsteoporosis/PatientOsteoporosis";
+import AddUpdateOsteoporosisHistory from "./components/PatientOsteoporosis/AddUpdateOsteoporosis";
 
 function App() {
   const routes = createBrowserRouter([
@@ -130,14 +132,20 @@ function App() {
               ],
             },
             {
-              path: "Osteoporisis",
+              path: "Osteoporosis",
               element: (
-                <RouteOutlet title="Osteoporosis" route="Osteoporisis" />
+                <RouteOutlet title="Osteoporosis" route="Osteoporosis" />
               ),
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdateOsteoporosisHistory state="add" />,
+                },
+                {
+                  path: "update/:id",
+                  element: <AddUpdateOsteoporosisHistory />,
+                },
+                { path: ":id", element: <PatientOsteoporosisHistory /> },
               ],
             },
             {
