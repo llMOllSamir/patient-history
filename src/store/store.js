@@ -5,6 +5,7 @@ import doctorReducer from "./slices/doctorSlice";
 import generalExaminationReducer from "./slices/generalExaminationSlice";
 import gynecologicalHistoryReducer from "./slices/gynecologicalHistorySlice";
 import obstetricsReducer from "./slices/obstetricsSlice";
+import osteoporosisReducer from "./slices/osteoporosisSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     generalExamination: generalExaminationReducer,
     gynecologicalHistory: gynecologicalHistoryReducer,
     obstetrics: obstetricsReducer,
+    osteoporosis: osteoporosisReducer,
   },
 });
 
