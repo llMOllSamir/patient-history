@@ -19,6 +19,8 @@ import PatientOsteoporosisHistory from "./components/PatientOsteoporosis/Patient
 import AddUpdateOsteoporosisHistory from "./components/PatientOsteoporosis/AddUpdateOsteoporosis";
 import PatientPreEclampsia from "./components/PatientPreEclampsia/PatientPreEclampsia";
 import AddUpdatePreEclampsiaHistory from "./components/PatientPreEclampsia/AddUpdatePreEclampsia";
+import PatientBreastCancerHistory from "./components/PatientBreastCancer/PatientBreastCancer";
+import AddUpdateBreastCancerHistory from "./components/PatientBreastCancer/AddUpdateBreastCancer";
 
 function App() {
   const routes = createBrowserRouter([
@@ -110,9 +112,15 @@ function App() {
               path: "breast",
               element: <RouteOutlet title="Breast Cancer" route="breast" />,
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdateBreastCancerHistory state="add" />,
+                },
+                {
+                  path: "update/:id",
+                  element: <AddUpdateBreastCancerHistory />,
+                },
+                { path: ":id", element: <PatientBreastCancerHistory /> },
               ],
             },
             {
