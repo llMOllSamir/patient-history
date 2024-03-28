@@ -21,6 +21,8 @@ import PatientPreEclampsia from "./components/PatientPreEclampsia/PatientPreEcla
 import AddUpdatePreEclampsiaHistory from "./components/PatientPreEclampsia/AddUpdatePreEclampsia";
 import PatientBreastCancerHistory from "./components/PatientBreastCancer/PatientBreastCancer";
 import AddUpdateBreastCancerHistory from "./components/PatientBreastCancer/AddUpdateBreastCancer";
+import PatientOvarianCancerHistory from "./components/PatientOvarianCancer/PatientOvarianCancer";
+import AddUpdateOvarianCancer from "./components/PatientOvarianCancer/AddUpdateOvarianCancer";
 
 function App() {
   const routes = createBrowserRouter([
@@ -127,9 +129,12 @@ function App() {
               path: "ovarian",
               element: <RouteOutlet title="Ovarian Cancer" route="ovarian" />,
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdateOvarianCancer state="add" />,
+                },
+                { path: "update/:id", element: <AddUpdateOvarianCancer /> },
+                { path: ":id", element: <PatientOvarianCancerHistory /> },
               ],
             },
             {
