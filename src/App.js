@@ -17,6 +17,8 @@ import PatientObstetricsHistory from "./components/PatientObstetricsHistory/Pati
 import AddUpdateObstetricsHistory from "./components/PatientObstetricsHistory/AddUpdateObstetricsHistory";
 import PatientOsteoporosisHistory from "./components/PatientOsteoporosis/PatientOsteoporosis";
 import AddUpdateOsteoporosisHistory from "./components/PatientOsteoporosis/AddUpdateOsteoporosis";
+import PatientPreEclampsia from "./components/PatientPreEclampsia/PatientPreEclampsia";
+import AddUpdatePreEclampsiaHistory from "./components/PatientPreEclampsia/AddUpdatePreEclampsia";
 
 function App() {
   const routes = createBrowserRouter([
@@ -154,9 +156,15 @@ function App() {
                 <RouteOutlet title="Pre-eclampsia" route="Pre-eclampsia" />
               ),
               children: [
-                { path: "add" },
-                { path: "update/:id" },
-                { path: ":id" },
+                {
+                  path: "add",
+                  element: <AddUpdatePreEclampsiaHistory state="add" />,
+                },
+                {
+                  path: "update/:id",
+                  element: <AddUpdatePreEclampsiaHistory />,
+                },
+                { path: ":id", element: <PatientPreEclampsia /> },
               ],
             },
           ],
