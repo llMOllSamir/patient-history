@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import DashboredHeader from "../DashboredHeader/DashboredHeader";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import FixedRoute from "../FixedRoute";
+import { useSelector } from "react-redux";
 
 export default function RouteOutlet({ title = "", route = "" }) {
   const { pathname } = useLocation();
+
+  const { id } = useParams();
+  // get patient data
+  const { patientCode } = useSelector((state) => state.patient);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!id && !patientCode) {
+      navigate("/");
+    }
+  }, [id, navigate, patientCode]);
 
   return (
     <section className="grow">
