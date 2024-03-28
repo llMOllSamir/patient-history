@@ -1,45 +1,69 @@
 import React from "react";
-import { Link, NavLink, useLocation, useParams } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
 import * as svgs from "../SVG/svgTags";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fixPatientCode, setPatientId } from "../../store/slices/patientSlice";
 
 export default function SlideNav() {
   const handlePrint = () => {
     window.print();
   };
 
-  const { patientCode, data } = useSelector((state) => state.patient);
+  const { patientCode, data, id } = useSelector((state) => state.patient);
+
+  const pCode = localStorage.getItem("patientCode");
+  const pID = localStorage.getItem("patientID");
+
+  const dispatch = useDispatch();
+  if (!patientCode) {
+    dispatch(fixPatientCode(parseInt(pCode)));
+  }
+  if (!id) {
+    dispatch(setPatientId({ id: parseInt(pID) }));
+  }
 
   const { pathname } = useLocation();
 
   const links = [
     {
       title: "Personal Information",
-      ref: "personal-information",
+      ref: `personal-information/${patientCode}`,
       logo: svgs.Information,
     },
     {
       title: "General Examination",
-      ref: "General-examination",
+      ref: `General-examination/${id}`,
       logo: svgs.Examination,
     },
     {
       title: "Gynecological history",
-      ref: "gynecological-history",
+      ref: `gynecological-history/${id}`,
       logo: svgs.Gynecological,
     },
     {
       title: "Obstetrics history",
-      ref: "obstetrics-history",
+      ref: `obstetrics-history/${id}`,
       logo: svgs.Obstetrics,
     },
   ];
   const oncology = [
-    { title: "Cervical Cancer", ref: "cervical", logo: svgs.Cervical },
-    { title: "Breast Cancer", ref: "breast", logo: svgs.Breast },
-    { title: "Ovarian Cancer", ref: "ovarian", logo: svgs.Ovarian },
-    { title: "Uterine Cancer", ref: "uterine", logo: svgs.Uterine },
+    {
+      title: "Cervical Cancer",
+      ref: `cervical/${id}`,
+      logo: svgs.Cervical,
+    },
+    { title: "Breast Cancer", ref: `breast/${id}`, logo: svgs.Breast },
+    {
+      title: "Ovarian Cancer",
+      ref: `ovarian/${id}`,
+      logo: svgs.Ovarian,
+    },
+    {
+      title: "Uterine Cancer",
+      ref: `uterine/${id}`,
+      logo: svgs.Uterine,
+    },
   ];
 
   return (
@@ -113,7 +137,7 @@ export default function SlideNav() {
           <li className="sm:px-10  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={"Osteoporosis"}
+              to={`Osteoporosis/${id}`}
             >
               <svgs.Osteoporosis
                 fill={pathname.includes("Osteoporosis") ? "#773479" : "white"}
@@ -124,7 +148,7 @@ export default function SlideNav() {
           <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={"Pre-eclampsia"}
+              to={`Pre-eclampsia/${id}`}
             >
               <svgs.Eclampsia
                 fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}

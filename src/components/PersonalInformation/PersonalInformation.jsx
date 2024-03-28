@@ -19,15 +19,6 @@ export default function PersonalInformation() {
   // get patient data
   const { data, patientCode } = useSelector((state) => state.patient);
 
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!id && !patientCode) {
-      navigate("/");
-    } else if (!id && patientCode) {
-      navigate(`/personal-information/${patientCode}`);
-    }
-  }, [id, navigate, patientCode]);
-
   // fetch data success
   const onSuccess = (data) => {
     dispatech(fixPatientCode(data.data.patient_code));
