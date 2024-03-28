@@ -13,12 +13,15 @@ const patientSlice = createSlice({
     // fix patient Code
     fixPatientCode: (state, { payload }) => {
       state.patientCode = payload;
+      localStorage.setItem("patientCode", JSON.stringify(payload));
     },
     emptyPatientCode: (state, { payload }) => {
       state.patientCode = null;
+      localStorage.removeItem("patientCode");
     },
     setPatientId: (state, { payload }) => {
       state.id = payload.id;
+      localStorage.setItem("patientID", JSON.stringify(payload.id));
     },
   },
 });
