@@ -19,6 +19,10 @@ const patientSlice = createSlice({
       state.patientCode = null;
       localStorage.removeItem("patientCode");
     },
+    emptyPatientID: (state) => {
+      state.id = null;
+      localStorage.removeItem("patientID");
+    },
     setPatientId: (state, { payload }) => {
       state.id = payload.id;
       localStorage.setItem("patientID", JSON.stringify(payload.id));
@@ -31,5 +35,6 @@ export const {
   emptyPatientCode,
   setPatientData,
   setPatientId,
+  emptyPatientID,
 } = patientSlice.actions;
 export default patientSlice.reducer;
