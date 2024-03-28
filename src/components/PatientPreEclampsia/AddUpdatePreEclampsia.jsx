@@ -8,63 +8,70 @@ import { ImSpinner6 } from "react-icons/im";
 import { useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import {
-  addOsteoporosis,
-  clearOsteoporosisData,
-  getOsteoporosis,
-  updateOsteoporosis,
-} from "../../store/slices/osteoporosisSlice";
+  addPreEclampsia,
+  clearPreEclampsiaData,
+  getPreEclampsia,
+  updatePreEclampsia,
+} from "../../store/slices/preEclampsiaSlice";
 
-export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
+export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
   const { id } = useParams();
   const dispatech = useDispatch();
 
   const validationSchema = yup.object({
-    age: yup.number("Must be number!"),
-    weight: yup.number("Must be number!"),
-    current_oestrogen_use: yup.string(),
-    recommendations: yup.string(),
+    "history_of_pre-eclampsia": yup.string(),
+    number_of_pregnancies_with_pe: yup
+      .number("Must be number!")
+      .moreThan(0, "Must be more than zero!"),
+    date_of_pregnancies_with_pe: yup.string(),
+    fate_of_the_pregnancy: yup.string(),
   });
 
-  const { osteoporosis, loading, error } = useSelector(
-    (state) => state.osteoporosis
+  const { preEclampsia, loading, error } = useSelector(
+    (state) => state.preEclampsia
   );
   const patient = useSelector((state) => state.patient);
 
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      age: osteoporosis.age || "",
-      weight: osteoporosis.weight || "",
-      current_oestrogen_use: osteoporosis.current_oestrogen_use ? "yes" : "no",
+      "history_of_pre-eclampsia": preEclampsia["history_of_pre-eclampsia"]
+        ? "yes"
+        : "no",
+      number_of_pregnancies_with_pe:
+        preEclampsia.number_of_pregnancies_with_pe || "",
+      date_of_pregnancies_with_pe:
+        preEclampsia.date_of_pregnancies_with_pe || "",
+      fate_of_the_pregnancy: preEclampsia.fate_of_the_pregnancy || "",
     },
     validationSchema,
     onSubmit: (values) => {
-      values.current_oestrogen_use =
-        values.current_oestrogen_use.toLocaleLowerCase() === "yes"
+      values["history_of_pre-eclampsia"] =
+        values["history_of_pre-eclampsia"].toLocaleLowerCase() === "yes"
           ? true
           : false;
       if (state === "update") {
         dispatech(
-          updateOsteoporosis({
-            id: Number(osteoporosis.id),
+          updatePreEclampsia({
+            id: Number(preEclampsia.id),
             data: { patient_id: id, ...values },
           })
         ).then((response) => {
           if (response.payload.examination) {
             navigate(
-              `/patient/osteoporosis/${response.payload.examination.patient_id}`
+              `/patient/Pre-eclampsia/${response.payload.examination.patient_id}`
             );
           }
         });
       } else {
         dispatech(
-          addOsteoporosis({
+          addPreEclampsia({
             data: { patient_id: patient.id, ...values },
           })
         ).then((response) => {
           if (response.payload.test) {
             navigate(
-              `/patient/osteoporosis/${response.payload.test.patient_id}`
+              `/patient/Pre-eclampsia/${response.payload.test.patient_id}`
             );
           }
         });
@@ -74,25 +81,28 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
 
   useEffect(() => {
     if (state === "update") {
-      dispatech(getOsteoporosis({ id: Number(id) }));
+      dispatech(getPreEclampsia({ id: Number(id) }));
     } else {
-      dispatech(clearOsteoporosisData());
+      dispatech(clearPreEclampsiaData());
     }
   }, [dispatech, id]);
 
   useEffect(() => {
-    // Set initial values for formik after osteoporosis data is fetched
-    if (osteoporosis) {
+    // Set initial values for formik after Pre-eclampsia data is fetched
+    if (preEclampsia) {
       formik.setValues({
-        age: osteoporosis.age || "",
-        weight: osteoporosis.weight || "",
-        current_oestrogen_use: osteoporosis.current_oestrogen_use
-          ? "Yes"
-          : "No",
+        "history_of_pre-eclampsia": preEclampsia["history_of_pre-eclampsia"]
+          ? "yes"
+          : "no",
+        number_of_pregnancies_with_pe:
+          preEclampsia.number_of_pregnancies_with_pe || "",
+        date_of_pregnancies_with_pe:
+          preEclampsia.date_of_pregnancies_with_pe || "",
+        fate_of_the_pregnancy: preEclampsia.fate_of_the_pregnancy || "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [osteoporosis]);
+  }, [preEclampsia]);
 
   if (loading) {
     return <LoadingPatient />;
@@ -104,7 +114,7 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
           something wrong happened
         </h2>
         <Link
-          to={"/osteoporosis"}
+          to={"/Pre-eclampsia"}
           className="bg-fuchsia-900 text-lg px-3 text-white rounded-lg py-2"
         >
           Search With Code
@@ -113,27 +123,18 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
     );
   }
 
-  if (osteoporosis) {
+  if (preEclampsia) {
     return (
       <form onSubmit={formik.handleSubmit} className="select-none">
         <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <InputInfo form={formik} name={"age"} title={"age"} />
-
-          <InputInfo
-            form={formik}
-            name={"weight"}
-            title={"weight"}
-            type="number"
-          />
-
           <div className={`flex flex-col font-medium gap-1  capitalize `}>
-            <label htmlFor={"current_oestrogen_use"} className="text-base ">
-              current oestrogen use
+            <label htmlFor={"history_of_pre-eclampsia"} className="text-base ">
+              history of pre-eclampsia
             </label>
             <select
-              value={formik.values.current_oestrogen_use}
-              name="current_oestrogen_use"
-              id="current_oestrogen_use"
+              value={formik.values["history_of_pre-eclampsia"]}
+              name="history_of_pre-eclampsia"
+              id="history_of_pre-eclampsia"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `}
@@ -149,7 +150,45 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
               ))}
             </select>
           </div>
+          <InputInfo
+            form={formik}
+            name={"number_of_pregnancies_with_pe"}
+            title={"number of pregnancies with pe"}
+            type="number"
+          />
+
+          <InputInfo
+            form={formik}
+            name={"date_of_pregnancies_with_pe"}
+            title={"date_of_pregnancies_with_pe"}
+            type="date"
+          />
+
+          <div className={`flex flex-col font-medium gap-1  capitalize `}>
+            <label htmlFor={"fate_of_the_pregnancy"} className="text-base ">
+              history of pre-eclampsia
+            </label>
+            <select
+              value={formik.values.fate_of_the_pregnancy}
+              name="fate_of_the_pregnancy"
+              id="fate_of_the_pregnancy"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `}
+            >
+              {["1 child", "> 1 child", "still birth"].map((state, index) => (
+                <option
+                  key={index}
+                  className="capitalize cursor-pointer"
+                  value={state}
+                >
+                  {state}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
         <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
           <button
             type="submit"
@@ -168,7 +207,7 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
     return (
       <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
         <Link
-          to={`/patient/osteoporosis/add/`}
+          to={`/patient/Pre-eclampsia/add/`}
           className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
         >
           <MdAdd />
