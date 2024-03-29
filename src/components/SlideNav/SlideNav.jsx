@@ -66,6 +66,7 @@ export default function SlideNav() {
     },
   ];
 
+
   return (
     <aside className=" select-none    print:hidden md:w-2/6 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white">
       {data && !pathname.endsWith("add") ? (
@@ -97,15 +98,15 @@ export default function SlideNav() {
         <ul className="flex flex-col gap-y-2 items-center justify-start">
           {links.map((link, index) => (
             <li
-              className="  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 sm:px-10"
+              className={`py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 sm:px-10`}
               key={index}
             >
               <NavLink
-                className={`flex justify-start items-center gap-2`}
+                className={`flex justify-start items-center gap-2  ${pathname.split("/").includes(link.ref.split("/")[0]) && "active"} `}
                 to={link.ref}
               >
                 <link.logo
-                  fill={pathname.includes(link.ref) ? "#773479" : "white"}
+                  fill={pathname.split("/").includes(link.ref.split("/")[0]) ? "#773479" : "white"}
                 />
                 {link.title}
               </NavLink>

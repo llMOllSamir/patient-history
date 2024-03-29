@@ -2,7 +2,7 @@ import React from 'react'
 import styles from "./UpdatePatient.module.css";
 import { useFormik } from 'formik';
 import * as yup from "yup"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { emptyPatientCode, fixPatientCode, setPatientData } from '../../store/slices/patientSlice';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPatient, useUpdatePatient } from '../../hooks/patient';
@@ -12,27 +12,18 @@ import notify from '../../utilities/alert-toastify';
 
 
 export default function UpdatePatient() {
-  const { id } = useParams()
-  const dispatech = useDispatch()
   const navigate = useNavigate()
+  const { data } = useSelector(state => state.patient)
 
-  // fetch data success
-  const onSuccess = (data) => {
-    dispatech(fixPatientCode(data.data.patient_code))
-    dispatech(setPatientData(data.data))
-  }
 
-  const { isLoading, error, isError, data } = useGetPatient({ code: id, onSuccess })
-
-  const successed = () => {
+  const onSuccess = () => {
     notify("Information Updated", "success")
-    navigate(`/patient/personal-information/${data.data.patient_code}`)
+    navigate(`/patient/personal-information/${data.patient_code}`)
   }
   const onError = (error) => {
     notify("Information Wrong", "error")
-
   }
-  const { isLoading: loadedUpdate, mutate } = useUpdatePatient({ onSuccess: successed, onError })
+  const { isLoading: loadedUpdate, mutate } = useUpdatePatient({ onSuccess, onError })
 
   const validationSchema = yup.object({
     name: yup.string().required("Name Is Requeired"),
@@ -49,32 +40,21 @@ export default function UpdatePatient() {
 
   const formik = useFormik({
     initialValues: {
-      name: data?.data?.name || "",
-      national_id: data?.data?.national_id,
-      age: data?.data?.age || "",
-      marital_state: data?.data?.marital_state || "",
-      address: data?.data?.address || "",
-      phone_number: data?.data?.phone_number || "",
-      email: data?.data?.email || "",
-      relative_phone: data?.data?.relative_phone || "",
-      relative_name: data?.data?.relative_name || "",
-      date_of_birth: data?.data?.date_of_birth || "",
+      name: data?.name || "",
+      national_id: data?.national_id,
+      age: data?.age || "",
+      marital_state: data?.marital_state || "",
+      address: data?.address || "",
+      phone_number: data?.phone_number || "",
+      email: data?.email || "",
+      relative_phone: data?.relative_phone || "",
+      relative_name: data?.relative_name || "",
+      date_of_birth: data?.date_of_birth || "",
     }, validationSchema, onSubmit: (values) => {
-      mutate({ data: values, id: data.data.id });
+      mutate({ data: values, id: data.id });
     }
   })
 
-
-  if (isLoading) { return <LoadingPatient /> }
-  if (isError) {
-    dispatech(setPatientData(null))
-    dispatech(fixPatientCode(null))
-
-    return <div className='mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  '>
-      <h2 className='font-bold text-red-500 text-3xl'>{error.response.data.error}</h2>
-      <Link onClick={() => { dispatech(emptyPatientCode()) }} to={"/patient/personal-information"} className='bg-fuchsia-900 text-lg px-3 text-white rounded-lg py-2'>Search With Code</Link>
-    </div>
-  }
 
   if (data) {
     return (

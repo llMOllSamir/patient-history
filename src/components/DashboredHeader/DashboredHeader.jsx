@@ -15,9 +15,10 @@ export default function DashboredHeader() {
   }
   const { refetch } = useLogout({ onSuccess })
   return (
-    <header className='w-full grow bg-fuchsia-900 text-white  h-20 mb-10 flex justify-end items-center px-10 gap-5  '>
-      <h2 className=' capitalize text-lg select-none decoration-2 underline underline-offset-4  font-bold'>Dr.{user?.name.split(" ").slice(0, 2).join(" ") || ""}</h2>
-      <button onClick={refetch} className='border border-white px-8 rounded-xl py-1'>Log Out</button>
-    </header>
+    <>
+      {user && <header className='w-full print:hidden grow bg-fuchsia-900 text-white  h-20 mb-10 flex justify-end items-center px-10 gap-5  '>
+        <h2 className=' capitalize text-lg select-none decoration-2 underline underline-offset-4  font-bold'>Dr.{user?.name.split(" ").slice(0, 2).join(" ") || ""}</h2>
+        <button onClick={refetch} className='border border-white px-8 rounded-xl py-1'>Log Out</button>
+      </header>}</>
   )
 }
