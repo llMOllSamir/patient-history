@@ -21,7 +21,7 @@ export const getPreEclampsia = createAsyncThunk(
       const response = await Http().get(`/pre-eclampsia/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -89,9 +89,10 @@ const preEclampsiaSlice = createSlice({
       state.error = null;
       state.preEclampsia = payload;
     });
-    builder.addCase(getPreEclampsia.rejected, (state) => {
+    builder.addCase(getPreEclampsia.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });

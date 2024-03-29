@@ -24,7 +24,7 @@ export const getGeneralExamination = createAsyncThunk(
       const response = await Http().get(`/general-examination/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -98,9 +98,10 @@ const generalExaminationSlice = createSlice({
       state.error = null;
       state.generalExamination = payload;
     });
-    builder.addCase(getGeneralExamination.rejected, (state) => {
+    builder.addCase(getGeneralExamination.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });

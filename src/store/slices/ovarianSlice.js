@@ -25,7 +25,7 @@ export const getOvarian = createAsyncThunk(
       const response = await Http().get(`/ovarian/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -93,9 +93,10 @@ const ovarianSlice = createSlice({
       state.error = null;
       state.ovarian = payload;
     });
-    builder.addCase(getOvarian.rejected, (state) => {
+    builder.addCase(getOvarian.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });

@@ -12,7 +12,7 @@ export default function RouteOutlet({ title = "", route = "" }) {
   const { patientCode } = useSelector((state) => state.patient);
   const navigate = useNavigate();
   useEffect(() => {
-    if (!id && !patientCode) {
+    if (!id && !patientCode && !pathname.endsWith("new-patient")) {
       navigate("/");
     }
   }, [id, navigate, patientCode]);

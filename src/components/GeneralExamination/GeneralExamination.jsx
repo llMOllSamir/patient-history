@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./GeneralExamination.module.css";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -31,14 +30,12 @@ export default function GeneralExamination() {
   if (error) {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
-        <h2 className="font-bold text-red-500 text-3xl">
-          {error.response.error}
-        </h2>
+        <h2 className="font-bold text-red-500 text-3xl">{error.data.error}</h2>
         <Link
-          to={"/patient/personal-information"}
+          to={"/patient/General-examination/add"}
           className="bg-fuchsia-900 text-lg px-3 text-white rounded-lg py-2"
         >
-          Search With Code
+          Add New Examination
         </Link>
       </div>
     );

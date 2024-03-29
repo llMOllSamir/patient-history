@@ -16,10 +16,10 @@ export default function SlideNav() {
   const pID = localStorage.getItem("patientID");
 
   const dispatch = useDispatch();
-  if (!patientCode) {
+  if (!patientCode && pCode) {
     dispatch(fixPatientCode(parseInt(pCode)));
   }
-  if (!id) {
+  if (!id && pID) {
     dispatch(setPatientId({ id: parseInt(pID) }));
   }
 
@@ -28,40 +28,40 @@ export default function SlideNav() {
   const links = [
     {
       title: "Personal Information",
-      ref: `personal-information/${patientCode}`,
+      ref: `personal-information/${patientCode || ""}`,
       logo: svgs.Information,
     },
     {
       title: "General Examination",
-      ref: `General-examination/${id}`,
+      ref: `General-examination/${id || ""}`,
       logo: svgs.Examination,
     },
     {
       title: "Gynecological history",
-      ref: `gynecological-history/${id}`,
+      ref: `gynecological-history/${id || ""}`,
       logo: svgs.Gynecological,
     },
     {
       title: "Obstetrics history",
-      ref: `obstetrics-history/${id}`,
+      ref: `obstetrics-history/${id || ""}`,
       logo: svgs.Obstetrics,
     },
   ];
   const oncology = [
     {
       title: "Cervical Cancer",
-      ref: `cervical/${id}`,
+      ref: `cervical/${id || ""}`,
       logo: svgs.Cervical,
     },
-    { title: "Breast Cancer", ref: `breast/${id}`, logo: svgs.Breast },
+    { title: "Breast Cancer", ref: `breast/${id || ""}`, logo: svgs.Breast },
     {
       title: "Ovarian Cancer",
-      ref: `ovarian/${id}`,
+      ref: `ovarian/${id || ""}`,
       logo: svgs.Ovarian,
     },
     {
       title: "Uterine Cancer",
-      ref: `uterine/${id}`,
+      ref: `uterine/${id || ""}`,
       logo: svgs.Uterine,
     },
   ];
@@ -137,7 +137,7 @@ export default function SlideNav() {
           <li className="sm:px-10  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={`Osteoporosis/${id}`}
+              to={`Osteoporosis/${id || ""}`}
             >
               <svgs.Osteoporosis
                 fill={pathname.includes("Osteoporosis") ? "#773479" : "white"}
@@ -148,7 +148,7 @@ export default function SlideNav() {
           <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={`Pre-eclampsia/${id}`}
+              to={`Pre-eclampsia/${id || ""}`}
             >
               <svgs.Eclampsia
                 fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}
