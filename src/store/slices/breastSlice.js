@@ -20,7 +20,7 @@ export const getBreast = createAsyncThunk(
       const response = await Http().get(`/breast/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -88,9 +88,10 @@ const breastSlice = createSlice({
       state.error = null;
       state.breast = payload;
     });
-    builder.addCase(getBreast.rejected, (state) => {
+    builder.addCase(getBreast.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });

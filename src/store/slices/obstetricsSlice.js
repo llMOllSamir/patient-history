@@ -21,7 +21,7 @@ export const getObstetrics = createAsyncThunk(
       const response = await Http().get(`/obstetrics/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -89,9 +89,10 @@ const obstetricsSlice = createSlice({
       state.error = null;
       state.obstetrics = payload;
     });
-    builder.addCase(getObstetrics.rejected, (state) => {
+    builder.addCase(getObstetrics.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });

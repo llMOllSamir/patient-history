@@ -21,7 +21,7 @@ export const getOsteoporosis = createAsyncThunk(
       const response = await Http().get(`/osteoporosis/${id}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(JSON.stringify(error.response));
     }
   }
 );
@@ -89,9 +89,10 @@ const osteoporosisSlice = createSlice({
       state.error = null;
       state.osteoporosis = payload;
     });
-    builder.addCase(getOsteoporosis.rejected, (state) => {
+    builder.addCase(getOsteoporosis.rejected, (state, { payload }) => {
+      payload = JSON.parse(payload);
       state.loading = false;
-      state.error = true;
+      state.error = payload;
     });
   },
 });
