@@ -8,6 +8,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useGetPatient, useUpdatePatient } from '../../hooks/patient';
 import LoadingPatient from '../../LoadingPatient';
 import { ImSpinner6 } from "react-icons/im";
+import notify from '../../utilities/alert-toastify';
 
 
 export default function UpdatePatient() {
@@ -24,29 +25,32 @@ export default function UpdatePatient() {
   const { isLoading, error, isError, data } = useGetPatient({ code: id, onSuccess })
 
   const successed = () => {
+    notify("Information Updated", "success")
     navigate(`/patient/personal-information/${data.data.patient_code}`)
   }
-  const { isLoading: loadedUpdate, mutate, isError: wrongData } = useUpdatePatient({ onSuccess: successed })
+  const onError = (error) => {
+    notify("Information Wrong", "error")
+
+  }
+  const { isLoading: loadedUpdate, mutate } = useUpdatePatient({ onSuccess: successed, onError })
 
   const validationSchema = yup.object({
     name: yup.string().required("Name Is Requeired"),
     national_id: yup.number().required("Id Is Requeired"),
-    patient_id: yup.number().required("Code Is Requeired"),
     date_of_birth: yup.string().required("Date Is Requeired"),
     age: yup.number().required("Age Is Requeired"),
     marital_state: yup.string().required("Marital Status Is Requeired"),
-    address: yup.string().required("Adress Is Requeired"),
+    address: yup.string(),
     phone_number: yup.string().required("phone Is Requeired"),
-    email: yup.string().required("Email Is Requeired").email(),
-    relative_phone: yup.string().required("phone Is Requeired"),
-    relative_name: yup.string().required("Name Is Requeired")
+    email: yup.string().email(),
+    relative_phone: yup.string(),
+    relative_name: yup.string()
   })
 
   const formik = useFormik({
     initialValues: {
       name: data?.data?.name || "",
       national_id: data?.data?.national_id,
-      patient_id: data?.data?.patient_code || "",
       age: data?.data?.age || "",
       marital_state: data?.data?.marital_state || "",
       address: data?.data?.address || "",
@@ -76,14 +80,10 @@ export default function UpdatePatient() {
     return (
 
       <form onSubmit={formik.handleSubmit} className='select-none'>
-        {wrongData && <p className='bg-red-300 text-red-800 text-xl font-semibold w-fit mx-auto px-10 py-1 rounded-lg'>Some Thing Went Wrong</p>}
         <div className='mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 '>
           <InputInfo col={2} form={formik} name={"name"} title={"Name"} />
 
           <InputInfo form={formik} name={"national_id"} title={"National ID"} type='number' />
-
-
-          <InputInfo form={formik} name={"patient_id"} title={"code"} type='number' />
 
           <InputInfo form={formik} name={"date_of_birth"} title={"Date Of Birth"} type='date' />
 
@@ -99,7 +99,9 @@ export default function UpdatePatient() {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `} >
-              {["Single", "Married", "Devorced"].map((state, index) => <option key={index} className='capitalize' value={state}>{state}</option>)}
+              <optgroup label='Marital State' >
+                {["Single", "Married", "Devorced"].map((state, index) => <option key={index} className='capitalize' value={state}>{state}</option>)}
+              </optgroup>
             </select>
           </div>
 

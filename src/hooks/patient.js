@@ -10,10 +10,10 @@ export const useGetPatient = ({ code, onSuccess }) => {
 
 // add patient
 const sendData = (data) => fetching().post("/patients", data);
-export const useAddPatient = ({ onSuccess }) =>
-  useMutation(sendData, { onSuccess });
+export const useAddPatient = ({ onSuccess, onError }) =>
+  useMutation(sendData, { onSuccess, onError });
 
 // update patient
 const updated = ({ data, id }) => fetching().put(`/patients/${id}`, data);
-export const useUpdatePatient = ({ onSuccess }) =>
-  useMutation(updated, { onSuccess });
+export const useUpdatePatient = ({ onSuccess,onError }) =>
+  useMutation(updated, { onSuccess ,onError});

@@ -135,7 +135,7 @@ export default function Home() {
               type="text"
               id="search"
               className="  rounded-s-xl text-black grow outline-none text-xl py-2 px-5"
-              placeholder="inter patient code"
+              placeholder="Enter patient code"
             />
             <div className="px-10 flex justify-center items-center">
               {" "}
