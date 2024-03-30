@@ -5,10 +5,19 @@ import * as svgs from "../SVG/svgTags";
 import { useDispatch, useSelector } from "react-redux";
 import { fixPatientCode, setPatientId } from "../../store/slices/patientSlice";
 import { MdHistory } from "react-icons/md";
+import QRCode from "qrcode.react";
 
 export default function SlideNav() {
-  const handlePrint = () => {
-    window.print();
+  const printQRCode = () => {
+    const qrCodeDataUrl = document.getElementById("qr-code").toDataURL();
+    const windowContent = "<!DOCTYPE html>";
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow.document.open();
+    printWindow.document.write(
+      `${windowContent}<img src="${qrCodeDataUrl}" style="width:100%;" />`
+    );
+    printWindow.document.close();
+    printWindow.print();
   };
 
   const { patientCode, data, id } = useSelector((state) => state.patient);
@@ -67,7 +76,6 @@ export default function SlideNav() {
     },
   ];
 
-
   return (
     <aside className=" select-none    print:hidden md:w-2/6 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white">
       {data && !pathname.endsWith("add") ? (
@@ -78,12 +86,20 @@ export default function SlideNav() {
           </h2>
           <p className="text-sm font-normal text-orange-300">{patientCode}</p>
           <button
-            onClick={handlePrint}
+            onClick={printQRCode}
             type="button"
             className="text-xs font-medium bg-fuchsia-950 px-5 py-1 rounded-xl text-gray-400"
           >
             Print ID card
           </button>
+          {patientCode && (
+            <QRCode
+              id="qr-code"
+              level="Q"
+              value={`Patient Code is ${patientCode}`}
+              style={{ display: "none" }}
+            />
+          )}
         </div>
       ) : (
         <Link to={"/"}>
@@ -103,11 +119,18 @@ export default function SlideNav() {
               key={index}
             >
               <NavLink
-                className={`flex justify-start items-center gap-2  ${pathname.split("/").includes(link.ref.split("/")[0]) && "active"} `}
+                className={`flex justify-start items-center gap-2  ${
+                  pathname.split("/").includes(link.ref.split("/")[0]) &&
+                  "active"
+                } `}
                 to={link.ref}
               >
                 <link.logo
-                  fill={pathname.split("/").includes(link.ref.split("/")[0]) ? "#773479" : "white"}
+                  fill={
+                    pathname.split("/").includes(link.ref.split("/")[0])
+                      ? "#773479"
+                      : "white"
+                  }
                 />
                 {link.title}
               </NavLink>

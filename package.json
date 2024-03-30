@@ -11,6 +11,7 @@
     "formik": "^2.4.5",
     "generate-react-cli": "^8.4.1",
     "jsonwebtoken": "^9.0.2",
+    "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
