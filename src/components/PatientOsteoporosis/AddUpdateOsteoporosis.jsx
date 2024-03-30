@@ -117,8 +117,6 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
     return (
       <form onSubmit={formik.handleSubmit} className="select-none">
         <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <InputInfo form={formik} name={"age"} title={"age"} />
-
           <InputInfo
             form={formik}
             name={"weight"}
@@ -179,7 +177,14 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
   }
 }
 
-const InputInfo = ({ title, name, form, type = "text", col }) => {
+const InputInfo = ({
+  title,
+  name,
+  form,
+  type = "text",
+  col,
+  disabled = false,
+}) => {
   return (
     <div
       className={`flex flex-col font-medium gap-1  capitalize ${
@@ -206,6 +211,7 @@ const InputInfo = ({ title, name, form, type = "text", col }) => {
           col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "
         } w-full `}
         placeholder={`Insert ${title}`}
+        disabled={disabled}
       />
     </div>
   );

@@ -10,7 +10,6 @@ export default function RouteOutlet({ title = "", route = "" }) {
   const { id } = useParams();
   // get patient data
   const { patientCode } = useSelector((state) => state.patient);
-  
   const navigate = useNavigate();
   useEffect(() => {
     if (!id && !patientCode && !pathname.endsWith("new-patient")) {

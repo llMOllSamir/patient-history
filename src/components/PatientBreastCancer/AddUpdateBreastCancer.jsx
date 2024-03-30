@@ -111,11 +111,9 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
     return (
       <form onSubmit={formik.handleSubmit} className="select-none">
         <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <InputInfo form={formik} name={"age"} title={"age"} type="number" />
-
           <div className={`flex flex-col font-medium gap-1  capitalize `}>
             <label htmlFor={"family_history"} className="text-base">
-              current oestrogen use
+              family history
             </label>
             <select
               value={formik.values.family_history}
@@ -170,35 +168,3 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
     );
   }
 }
-
-const InputInfo = ({ title, name, form, type = "text", col }) => {
-  return (
-    <div
-      className={`flex flex-col font-medium gap-1  capitalize ${
-        col && `md:col-span-${col}`
-      }`}
-    >
-      <label htmlFor={name} className="text-base ">
-        {title}
-      </label>
-      {form.errors[name] && form.touched[name] && (
-        <p className="text-red-600 text-sm font-semibold">
-          {form.errors[name]}
-        </p>
-      )}
-
-      <input
-        name={name}
-        id={name}
-        type={type}
-        value={form.values[name]}
-        onBlur={form.handleBlur}
-        onChange={form.handleChange}
-        className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg ${
-          col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "
-        } w-full `}
-        placeholder={`Insert ${title}`}
-      />
-    </div>
-  );
-};

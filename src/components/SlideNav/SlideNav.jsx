@@ -4,6 +4,7 @@ import logo from "../../assets/images/logo-transparent.svg";
 import * as svgs from "../SVG/svgTags";
 import { useDispatch, useSelector } from "react-redux";
 import { fixPatientCode, setPatientId } from "../../store/slices/patientSlice";
+import { MdHistory } from "react-icons/md";
 
 export default function SlideNav() {
   const handlePrint = () => {
@@ -155,6 +156,20 @@ export default function SlideNav() {
                 fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}
               />
               Pre-eclampsia
+            </NavLink>
+          </li>
+          <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-red-900 ">
+            <NavLink
+              className={`flex justify-start items-center gap-2`}
+              to={`patient-history/${id || ""}`}
+            >
+              <MdHistory
+                color={
+                  pathname.includes("patient-history") ? "#773479" : "white"
+                }
+                size={"1.5rem"}
+              />
+              patient history
             </NavLink>
           </li>
         </ul>

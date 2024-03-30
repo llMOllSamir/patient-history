@@ -24,6 +24,7 @@ import AddUpdateBreastCancerHistory from "./components/PatientBreastCancer/AddUp
 import PatientOvarianCancerHistory from "./components/PatientOvarianCancer/PatientOvarianCancer";
 import AddUpdateOvarianCancer from "./components/PatientOvarianCancer/AddUpdateOvarianCancer";
 import ProtectedRoute from "./ProtectedRoute";
+import PatientHistory from "./components/PatientHistory/PatientHistory";
 
 function App() {
   const routes = createBrowserRouter([
@@ -253,6 +254,13 @@ function App() {
                 },
                 { path: ":id", element: <PatientPreEclampsia /> },
               ],
+            },
+            {
+              path: "patient-history",
+              element: (
+                <RouteOutlet title="Patient History" route="Patient-history" />
+              ),
+              children: [{ path: ":id", element: <PatientHistory /> }],
             },
           ],
         },
