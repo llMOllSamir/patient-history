@@ -23,6 +23,7 @@ import PatientBreastCancerHistory from "./components/PatientBreastCancer/Patient
 import AddUpdateBreastCancerHistory from "./components/PatientBreastCancer/AddUpdateBreastCancer";
 import PatientOvarianCancerHistory from "./components/PatientOvarianCancer/PatientOvarianCancer";
 import AddUpdateOvarianCancer from "./components/PatientOvarianCancer/AddUpdateOvarianCancer";
+import ProtectedRoute from "./ProtectedRoute";
 import PatientHistory from "./components/PatientHistory/PatientHistory";
 
 function App() {
@@ -46,8 +47,22 @@ function App() {
                 />
               ),
               children: [
-                { path: "new-patient", element: <AddPatient /> },
-                { path: "update-patient/:id", element: <UpdatePatient /> },
+                {
+                  path: "new-patient",
+                  element: (
+                    <ProtectedRoute>
+                      <AddPatient />
+                    </ProtectedRoute>
+                  ),
+                },
+                {
+                  path: "update-patient/:id",
+                  element: (
+                    <ProtectedRoute>
+                      <UpdatePatient />
+                    </ProtectedRoute>
+                  ),
+                },
                 { path: ":id", element: <PersonalInformation /> },
               ],
             },
@@ -62,11 +77,19 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdateGeneralExamination state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateGeneralExamination state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "update/:id",
-                  element: <AddUpdateGeneralExamination />,
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateGeneralExamination />
+                    </ProtectedRoute>
+                  ),
                 },
                 { path: ":id", element: <GeneralExamination /> },
               ],
@@ -96,9 +119,20 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdateObstetricsHistory state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateObstetricsHistory state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
-                { path: "update/:id", element: <AddUpdateObstetricsHistory /> },
+                {
+                  path: "update/:id",
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateObstetricsHistory />
+                    </ProtectedRoute>
+                  ),
+                },
                 { path: ":id", element: <PatientObstetricsHistory /> },
               ],
             },
@@ -117,11 +151,20 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdateBreastCancerHistory state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      {" "}
+                      <AddUpdateBreastCancerHistory state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "update/:id",
-                  element: <AddUpdateBreastCancerHistory />,
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateBreastCancerHistory />
+                    </ProtectedRoute>
+                  ),
                 },
                 { path: ":id", element: <PatientBreastCancerHistory /> },
               ],
@@ -132,9 +175,20 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdateOvarianCancer state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateOvarianCancer state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
-                { path: "update/:id", element: <AddUpdateOvarianCancer /> },
+                {
+                  path: "update/:id",
+                  element: (
+                    <ProtectedRoute>
+                      <AddUpdateOvarianCancer />
+                    </ProtectedRoute>
+                  ),
+                },
                 { path: ":id", element: <PatientOvarianCancerHistory /> },
               ],
             },
@@ -155,11 +209,21 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdateOsteoporosisHistory state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      {" "}
+                      <AddUpdateOsteoporosisHistory state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "update/:id",
-                  element: <AddUpdateOsteoporosisHistory />,
+                  element: (
+                    <ProtectedRoute>
+                      {" "}
+                      <AddUpdateOsteoporosisHistory />
+                    </ProtectedRoute>
+                  ),
                 },
                 { path: ":id", element: <PatientOsteoporosisHistory /> },
               ],
@@ -172,11 +236,21 @@ function App() {
               children: [
                 {
                   path: "add",
-                  element: <AddUpdatePreEclampsiaHistory state="add" />,
+                  element: (
+                    <ProtectedRoute>
+                      {" "}
+                      <AddUpdatePreEclampsiaHistory state="add" />
+                    </ProtectedRoute>
+                  ),
                 },
                 {
                   path: "update/:id",
-                  element: <AddUpdatePreEclampsiaHistory />,
+                  element: (
+                    <ProtectedRoute>
+                      {" "}
+                      <AddUpdatePreEclampsiaHistory />
+                    </ProtectedRoute>
+                  ),
                 },
                 { path: ":id", element: <PatientPreEclampsia /> },
               ],

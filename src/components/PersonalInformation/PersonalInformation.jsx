@@ -18,6 +18,7 @@ export default function PersonalInformation() {
   const dispatech = useDispatch();
   // get patient data
   const { data, patientCode } = useSelector((state) => state.patient);
+  const { user } = useSelector((state) => state.auth);
 
   // fetch data success
   const onSuccess = (data) => {
@@ -25,18 +26,20 @@ export default function PersonalInformation() {
     dispatech(setPatientData(data.data));
     dispatech(setPatientId({ id: data.data.id }));
   };
+  const onError = (error) => {
+    dispatech(setPatientData(null));
+    dispatech(fixPatientCode(null));
+  }
   const { isLoading, error, isError } = useGetPatient({
     code: id || patientCode,
     onSuccess,
+    onError
   });
 
   if (isLoading) {
     return <LoadingPatient />;
   }
   if (isError) {
-    dispatech(setPatientData(null));
-    dispatech(fixPatientCode(null));
-
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
         <h2 className="font-bold text-red-500 text-3xl">
@@ -105,13 +108,13 @@ export default function PersonalInformation() {
           />
         </div>
         <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
-          <Link
+          {user && user.role === "doctor" && <Link
             to={`/patient/personal-information/update-patient/${data.patient_code}`}
             className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
           >
             <MdEdit />
             Edit
-          </Link>
+          </Link>}
           <button
             className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
             onClick={() => {
@@ -129,9 +132,8 @@ export default function PersonalInformation() {
 const ArticalInfo = ({ title, description, col, phone = null }) => {
   return (
     <article
-      className={`flex flex-col font-medium capitalize ${
-        col && `md:col-span-${col}`
-      }`}
+      className={`flex flex-col font-medium capitalize ${col && `md:col-span-${col}`
+        }`}
     >
       <h3 className=" text-black   text-xl">{title || ""}</h3>
       {phone ? (

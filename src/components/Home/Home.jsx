@@ -43,11 +43,7 @@ export default function Home() {
     },
     validationSchema,
     onSubmit: (values) => {
-      if (user) {
-        navigate(`/patient/personal-information/${values.search}`);
-      } else {
-        navigate(`/login`);
-      }
+         navigate(`/patient/personal-information/${values.search}`);
     },
   });
 

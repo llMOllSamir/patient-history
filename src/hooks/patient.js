@@ -2,10 +2,10 @@ import { useMutation, useQuery } from "react-query";
 import fetching from "../fetchingRequest";
 
 // get patient by code
-export const useGetPatient = ({ code, onSuccess }) => {
+export const useGetPatient = ({ code, onSuccess, onError }) => {
   const fetchPatientByCode = () => fetching().get(`/patients/search/${code}`);
 
-  return useQuery("get patient", fetchPatientByCode, { onSuccess });
+  return useQuery("get patient", fetchPatientByCode, { onSuccess, onError });
 };
 
 // add patient
@@ -15,5 +15,5 @@ export const useAddPatient = ({ onSuccess, onError }) =>
 
 // update patient
 const updated = ({ data, id }) => fetching().put(`/patients/${id}`, data);
-export const useUpdatePatient = ({ onSuccess,onError }) =>
-  useMutation(updated, { onSuccess ,onError});
+export const useUpdatePatient = ({ onSuccess, onError }) =>
+  useMutation(updated, { onSuccess, onError });

@@ -92,7 +92,7 @@ export default function AddPatient() {
       </div>
 
       <div className='flex print:hidden gap-x-8 gap-y-4 justify-end  md:flex-row flex-col my-10  items-end md:items-center me-16'>
-        <button type='submit' disabled={!(formik.dirty && formik.isValid)} className='rounded-lg text-white disabled:bg-black bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2'>
+        <button type='submit'   className='rounded-lg text-white  bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2'>
           {isLoading ? <ImSpinner6 className='animate-spin ' size={"1.6rem"} /> : "Add"}
         </button>
       </div>
