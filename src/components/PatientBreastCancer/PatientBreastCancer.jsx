@@ -6,7 +6,6 @@ import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
 import { MdAdd, MdEdit } from "react-icons/md";
 import { setPatientId } from "../../store/slices/patientSlice";
-import { getOsteoporosis } from "../../store/slices/osteoporosisSlice";
 import { getBreast } from "../../store/slices/breastSlice";
 
 export default function PatientBreastCancerHistory() {
