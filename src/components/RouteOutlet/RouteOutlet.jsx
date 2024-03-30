@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import DashboredHeader from "../DashboredHeader/DashboredHeader";
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import FixedRoute from "../FixedRoute";
 import { useSelector } from "react-redux";
 
 export default function RouteOutlet({ title = "", route = "" }) {
@@ -15,6 +14,7 @@ export default function RouteOutlet({ title = "", route = "" }) {
     if (!id && !patientCode && !pathname.endsWith("new-patient")) {
       navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, navigate, patientCode]);
 
   return (
