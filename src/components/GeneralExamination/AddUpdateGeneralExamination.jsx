@@ -23,7 +23,9 @@ export default function AddUpdateGeneralExamination({ state = "update" }) {
     pulse: yup.number("Must be number!"),
     weight: yup.number("Must be number!"),
     random_blood_sugar: yup.number(),
-    blood_pressure: yup.string(),
+    blood_pressure: yup
+      .string()
+      .matches(/^\d{1,3}\/\d{1,3}$/, "Enter in format 90/75"),
   });
 
   const { generalExamination, loading, error } = useSelector(
