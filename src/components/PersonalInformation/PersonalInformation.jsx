@@ -73,7 +73,7 @@ export default function PersonalInformation() {
             title={"Date of birth"}
           />
 
-          <ArticalInfo description={data.age} title={"age"} />
+          <ArticalInfo description={data.age.toString()} title={"age"} />
 
           <ArticalInfo
             description={data.marital_state}

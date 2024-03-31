@@ -7,7 +7,6 @@ import logo from "../../assets/images/logo-transparent.svg";
 import { VscDiffAdded } from "react-icons/vsc";
 import { IoMenu } from "react-icons/io5";
 import { CiSearch } from "react-icons/ci";
-import { IoMdClose } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "../../hooks/auth";
 import { logout } from "../../store/slices/authSlice";
@@ -22,8 +21,10 @@ export default function Home() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
 
-  dispatch(emptyPatientCode());
-  dispatch(emptyPatientID());
+  useEffect(() => {
+    dispatch(emptyPatientCode());
+    dispatch(emptyPatientID())
+  }, [dispatch])
 
   const onSuccess = () => {
     dispatch(logout());
@@ -43,14 +44,14 @@ export default function Home() {
     },
     validationSchema,
     onSubmit: (values) => {
-         navigate(`/patient/personal-information/${values.search}`);
+      navigate(`/patient/personal-information/${values.search}`);
     },
   });
 
   return (
-    <section className={`${styles.home} text-white `}>
-      <div className="fixed inset-0 bg-transparent h-40 flex justify-between  lg:px-32 md:px-10 ">
-        <img src={logo} alt="Logo" className="w-100" />
+    <section className={`${styles.home} text-white select-none `}>
+      <div className="fixed inset-0 xl:mt-16 mt-5 bg-transparent h-40 flex justify-between items-center  lg:px-32 md:px-10 ">
+        <img src={logo} alt="Logo" className="w-2/6 sm:w-3/12 xl:w-2/12    aspect-square" />
         <div className="btn md:flex hidden justify-center items-center  gap-10  ">
           {user !== null ? (
             <>
@@ -79,7 +80,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className="menu md:hidden relative flex justify-center items-center mx-16 ">
+        <div className=" md:hidden  relative inline mx-16 ">
           <IoMenu
             size={"2rem"}
             cursor={"pointer"}
@@ -87,27 +88,28 @@ export default function Home() {
               setMenuOpen(!menuOpen);
             }}
           />
-          <aside
-            className={`fixed inset-0  w-0 overflow-hidden py-5   text-black flex flex-col ${
-              menuOpen ? styles.fadeInSlide : styles.fadeOutSlide
-            }   justify-start items-start px-5   bg-white`}
-          >
-            <IoMdClose
-              className="ms-auto "
-              size={"1.5rem"}
-              cursor={"pointer"}
-              onClick={() => {
-                setMenuOpen(!menuOpen);
-              }}
-            />
-            {user !== null ? (
-              <button onClick={refetch}>Logout</button>
-            ) : (
-              <Link className="" to={"/login"}>
-                Login
-              </Link>
-            )}
-          </aside>
+          {menuOpen &&
+            <nav
+              className={`absolute  top-full end-full  overflow-hidden w-48 h-0 py-0  rounded-2xl font-medium ${styles.dropdown}  gap-2  text-black flex flex-col justify-center items-center     bg-white`}
+            >
+              {user !== null ? (
+                <>
+                  <button className="  hover:bg-gray-400 flex justify-center py-1  w-full  " onClick={refetch}>Logout</button>
+                  <Link
+                    className="  w-full flex justify-center hover:bg-gray-400  py-1  items-center gap-3 "
+                    to={"/patient/personal-information/new-patient"}
+                  >
+                    <VscDiffAdded size={"1.5rem"} /> Add Patient
+                  </Link>
+                </>
+              ) : (
+                <Link className="  hover:bg-gray-400 flex justify-center py-1  w-full  " to={"/login"}>
+                  Login
+                </Link>
+              )}
+            </nav>
+          }
+
         </div>
       </div>
 

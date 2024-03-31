@@ -9,11 +9,11 @@ export default function Layout() {
   const { pathname } = useLocation();
   const dispatch = useDispatch()
   const { token } = useSelector(state => state.auth)
-
   //  get user data
   const getUserData = useCallback(async () => {
-    let { data } = await fetching().get("/auth/user")
-    dispatch(setUserData(data))
+    await fetching().get("/auth/user")
+      .then(({ data }) => { dispatch(setUserData(data)) })
+      .catch(err => { localStorage.removeItem("token") })
   }
     , [dispatch])
 

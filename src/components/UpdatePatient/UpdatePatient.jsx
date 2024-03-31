@@ -29,7 +29,6 @@ export default function UpdatePatient() {
     name: yup.string().required("Name Is Requeired"),
     national_id: yup.number().required("Id Is Requeired"),
     date_of_birth: yup.string().required("Date Is Requeired"),
-    age: yup.number().required("Age Is Requeired"),
     marital_state: yup.string().required("Marital Status Is Requeired"),
     address: yup.string(),
     phone_number: yup.string().required("phone Is Requeired"),
@@ -42,7 +41,6 @@ export default function UpdatePatient() {
     initialValues: {
       name: data?.name || "",
       national_id: data?.national_id,
-      age: data?.age || "",
       marital_state: data?.marital_state || "",
       address: data?.address || "",
       phone_number: data?.phone_number || "",
@@ -67,7 +65,6 @@ export default function UpdatePatient() {
 
           <InputInfo form={formik} name={"date_of_birth"} title={"Date Of Birth"} type='date' />
 
-          <InputInfo form={formik} name={"age"} title={"age"} type='number' />
 
 
           <div className={`flex flex-col font-medium gap-1  capitalize `}>

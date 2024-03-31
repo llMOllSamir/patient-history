@@ -32,33 +32,14 @@
   }
 }
 
-.fadeInSlide {
-  animation: slidfade alternate 0.5s;
+.dropdown {
+  animation: slidDown 0.3s alternate;
   animation-fill-mode: both;
-}
-.fadeOutSlide {
-  animation: slidfadeout alternate 0.5s;
-  animation-fill-mode: both;
-}
-@keyframes slidfade {
-  from {
-    width: 0;
-    overflow: hidden;
-  }
-  to {
-    width: 25%;
-    overflow: auto;
-  }
 }
 
-@keyframes slidfadeout {
-  from {
-    width: 25%;
-    overflow: auto;
-  }
+@keyframes slidDown {
   to {
-    width: 0%;
-    overflow: hidden;
-    padding: 0;
+    height: 100px;
+    padding-block: 12px;
   }
 }

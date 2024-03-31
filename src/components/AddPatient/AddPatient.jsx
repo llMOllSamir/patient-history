@@ -4,15 +4,15 @@ import { useFormik } from 'formik';
 import * as yup from "yup"
 import { useAddPatient } from '../../hooks/patient';
 import { ImSpinner6 } from "react-icons/im";
-import Modal from '../../Modal';
-import { FaCheck } from "react-icons/fa";
 import notify from '../../utilities/alert-toastify';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddPatient() {
-
+  const navigate = useNavigate()
 
   const onSuccess = (data) => {
     notify("Patient Added", "success")
+    navigate(`/patient/personal-information/${data.data.patient.patient_code}`)
   }
 
   const onError = (error) => {
@@ -25,11 +25,10 @@ export default function AddPatient() {
     name: yup.string().required("Name Is Requeired"),
     national_id: yup.number().required("Id Is Requeired"),
     date_of_birth: yup.string().required("Date Is Requeired"),
-    age: yup.number().required("Age Is Requeired"),
     marital_state: yup.string().required("Marital Status Is Requeired"),
     address: yup.string().optional(),
     phone_number: yup.string().required("phone Is Requeired"),
-    email: yup.string().email().required(),
+    email: yup.string().email(),
     relative_phone: yup.string().optional(),
     relative_name: yup.string().optional()
   })
@@ -39,7 +38,6 @@ export default function AddPatient() {
       name: "",
       national_id: "",
       date_of_birth: "",
-      age: "",
       marital_state: "",
       address: "",
       phone_number: "",
@@ -63,7 +61,6 @@ export default function AddPatient() {
 
         <InputInfo form={formik} name={"date_of_birth"} title={"Date Of Birth"} type='date' />
 
-        <InputInfo form={formik} name={"age"} title={"age"} type='number' />
 
         <div className={`flex flex-col font-medium gap-1  capitalize `}>
           <label htmlFor={"marital_state"} className='text-base '>marital state</label>
@@ -74,9 +71,9 @@ export default function AddPatient() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `} >
-            <optgroup label='Marital State' >
-              {["Single", "Married", "Devorced"].map((state, index) => <option key={index} className='capitalize cursor-pointer' value={state}>{state}</option>)}
-            </optgroup>
+            <option disabled value={""}>Select State</option>
+            {["Single", "Married", "Devorced"].map((state, index) => <option key={index} className='capitalize cursor-pointer' value={state}>{state}</option>)}
+
           </select>
         </div>
 
@@ -92,7 +89,7 @@ export default function AddPatient() {
       </div>
 
       <div className='flex print:hidden gap-x-8 gap-y-4 justify-end  md:flex-row flex-col my-10  items-end md:items-center me-16'>
-        <button type='submit'   className='rounded-lg text-white  bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2'>
+        <button type='submit' className='rounded-lg text-white  bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2'>
           {isLoading ? <ImSpinner6 className='animate-spin ' size={"1.6rem"} /> : "Add"}
         </button>
       </div>
