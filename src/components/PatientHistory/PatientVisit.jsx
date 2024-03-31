@@ -73,8 +73,8 @@ export default function Visit({ data, setIndex }) {
   };
   return (
     <>
-      <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 mb-5">
-        <div className={`flex flex-col font-medium gap-1  capitalize `}>
+      <div className="mx-4 lg:mx-16 grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
+        <div className={`flex flex-col font-medium gap-1 capitalize`}>
           <label htmlFor={"display"} className="text-base">
             Data To Display
           </label>
@@ -83,7 +83,7 @@ export default function Visit({ data, setIndex }) {
             name="display"
             id="display"
             onChange={handleChange}
-            className={` cursor-pointer border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `}
+            className={`cursor-pointer border outline-none px-2 py-1 border-gray-500 placeholder:text-gray-500 rounded-lg  w-full`}
           >
             {examinations.map((state, index) => (
               <option
@@ -96,15 +96,20 @@ export default function Visit({ data, setIndex }) {
             ))}
           </select>
         </div>
-        <div className="self-end ml-auto">
+        <div className="self-end text-xl text-center">{data.date}</div>
+        <div className="self-end text-xl capitalize text-center">
+          DR.{data.doctor_name}
+        </div>
+        <div className="self-end flex justify-center md:self-end">
           <button
-            className="  px-5 py-1 text-base font-medium  text-center text-white bg-blue-600 rounded-md border-2 border-blue-600 border-solid max-md:px-5"
+            className="px-5 py-1 text-base font-medium text-center text-white bg-blue-600 rounded-md border-2 border-blue-600 border-solid max-md:px-5"
             onClick={() => setIndex(0)}
           >
             Back
           </button>
         </div>
       </div>
+
       {examinations.find((x) => x.value === examination).element}
     </>
   );

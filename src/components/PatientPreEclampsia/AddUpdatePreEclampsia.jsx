@@ -19,11 +19,12 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
   const dispatech = useDispatch();
 
   const validationSchema = yup.object({
-    "history_of_pre-eclampsia": yup.string(),
+    "history_of_pre-eclampsia": yup.string().required("Required"),
     number_of_pregnancies_with_pe: yup
       .number("Must be number!")
-      .moreThan(0, "Must be more than zero!"),
-    date_of_pregnancies_with_pe: yup.string(),
+      .moreThan(-1, "Must be more than -1!")
+      .max(5, "Cannot exceed five"),
+    date_of_pregnancies_with_pe: yup.array().of(yup.string()).min(0),
     fate_of_the_pregnancy: yup.string(),
   });
 
@@ -40,8 +41,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
         : "no",
       number_of_pregnancies_with_pe:
         preEclampsia.number_of_pregnancies_with_pe || "",
-      date_of_pregnancies_with_pe:
-        preEclampsia.date_of_pregnancies_with_pe || "",
+      date_of_pregnancies_with_pe: Array.from({ length: 5 }, () => ""),
       fate_of_the_pregnancy: preEclampsia.fate_of_the_pregnancy || "",
     },
     validationSchema,
@@ -50,6 +50,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
         values["history_of_pre-eclampsia"].toLocaleLowerCase() === "yes"
           ? true
           : false;
+
       if (state === "update") {
         dispatech(
           updatePreEclampsia({
@@ -97,7 +98,8 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
         number_of_pregnancies_with_pe:
           preEclampsia.number_of_pregnancies_with_pe || "",
         date_of_pregnancies_with_pe:
-          preEclampsia.date_of_pregnancies_with_pe || "",
+          preEclampsia.date_of_pregnancies_with_pe ||
+          Array.from({ length: 5 }, () => ""),
         fate_of_the_pregnancy: preEclampsia.fate_of_the_pregnancy || "",
       });
     }
@@ -157,12 +159,32 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
             type="number"
           />
 
-          <InputInfo
+          {[
+            ...Array(
+              Math.min(
+                5,
+                Math.abs(
+                  parseInt(formik.values.number_of_pregnancies_with_pe || 0)
+                )
+              )
+            ),
+          ].map((_, index) => (
+            <InputInfo
+              key={index}
+              form={formik}
+              index={index}
+              name={`date_of_pregnancies_with_pe`}
+              title={`Date of Pregnancy #${index + 1} with PE`}
+              type="date"
+            />
+          ))}
+
+          {/* <InputInfo
             form={formik}
             name={"date_of_pregnancies_with_pe"}
-            title={"date_of_pregnancies_with_pe"}
+            title={"date of pregnancies with pe"}
             type="date"
-          />
+          /> */}
 
           <div className={`flex flex-col font-medium gap-1  capitalize `}>
             <label htmlFor={"fate_of_the_pregnancy"} className="text-base ">
@@ -218,7 +240,18 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
   }
 }
 
-const InputInfo = ({ title, name, form, type = "text", col }) => {
+const InputInfo = ({ title, name, form, type = "text", col, index }) => {
+  const handleChange = (event) => {
+    const { value } = event.target;
+
+    if (type === "date") {
+      const updatedArray = [...form.values[name]];
+      updatedArray[index] = value;
+      form.setFieldValue(name, updatedArray);
+    } else {
+      form.setFieldValue(name, value);
+    }
+  };
   return (
     <div
       className={`flex flex-col font-medium gap-1  capitalize ${
@@ -238,9 +271,11 @@ const InputInfo = ({ title, name, form, type = "text", col }) => {
         name={name}
         id={name}
         type={type}
-        value={form.values[name]}
+        min={type === "number" ? "0" : null}
+        max={type === "number" ? "5" : null}
+        value={type === "date" ? form.values[name][index] : form.values[name]}
         onBlur={form.handleBlur}
-        onChange={form.handleChange}
+        onChange={handleChange}
         className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg ${
           col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "
         } w-full `}

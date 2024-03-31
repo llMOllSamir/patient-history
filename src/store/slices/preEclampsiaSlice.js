@@ -29,6 +29,9 @@ export const getPreEclampsia = createAsyncThunk(
 export const updatePreEclampsia = createAsyncThunk(
   "preEclampsia/updatePreEclampsia",
   async ({ id, data }, { rejectWithValue }) => {
+    data.date_of_pregnancies_with_pe = JSON.stringify(
+      data.date_of_pregnancies_with_pe
+    );
     try {
       const response = await Http().put(`/pre-eclampsia/${id}`, data);
       if (response.status === 200) {
@@ -45,6 +48,9 @@ export const updatePreEclampsia = createAsyncThunk(
 export const addPreEclampsia = createAsyncThunk(
   "preEclampsia/addPreEclampsia",
   async ({ data }, { rejectWithValue }) => {
+    data.date_of_pregnancies_with_pe = JSON.stringify(
+      data.date_of_pregnancies_with_pe
+    );
     try {
       const response = await Http().post(`/pre-eclampsia/`, data);
       if (response.status === 201) {
@@ -87,6 +93,9 @@ const preEclampsiaSlice = createSlice({
     builder.addCase(getPreEclampsia.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
+      payload.date_of_pregnancies_with_pe = payload.date_of_pregnancies_with_pe
+        ? JSON.parse(payload.date_of_pregnancies_with_pe)
+        : null;
       state.preEclampsia = payload;
     });
     builder.addCase(getPreEclampsia.rejected, (state, { payload }) => {
