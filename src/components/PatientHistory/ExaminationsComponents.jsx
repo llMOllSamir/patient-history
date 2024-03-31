@@ -276,12 +276,20 @@ export const PreEclampsia = ({ preEclampsia }) => {
         title={"number of pregnancies with pe"}
       />
 
-      <ArticalInfo
-        description={
-          preEclampsia ? preEclampsia.date_of_pregnancies_with_pe : ""
-        }
-        title={"date of pregnancies with pe"}
-      />
+      {preEclampsia.date_of_pregnancies_with_pe &&
+      preEclampsia.date_of_pregnancies_with_pe.length
+        ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
+            if (date) {
+              return (
+                <ArticalInfo
+                  key={index}
+                  description={date}
+                  title={`date of pregnancies with pe #${index + 1}`}
+                />
+              );
+            }
+          })
+        : null}
 
       <ArticalInfo
         description={preEclampsia ? preEclampsia.fate_of_the_pregnancy : ""}

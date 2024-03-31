@@ -32,6 +32,14 @@ const patientHistorySlice = createSlice({
     builder.addCase(getHistory.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
+      payload.forEach((element) => {
+        if (element.preEclampsia.date_of_pregnancies_with_pe.length) {
+          element.preEclampsia.date_of_pregnancies_with_pe = element
+            .preEclampsia.date_of_pregnancies_with_pe
+            ? JSON.parse(element.preEclampsia.date_of_pregnancies_with_pe)
+            : null;
+        }
+      });
       state.history = payload;
     });
     builder.addCase(getHistory.rejected, (state, { payload }) => {
