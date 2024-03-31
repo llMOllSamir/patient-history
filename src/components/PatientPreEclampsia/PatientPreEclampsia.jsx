@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,10 +58,19 @@ export default function PatientPreEclampsia() {
             title={"number of pregnancies with pe"}
           />
 
-          <ArticalInfo
-            description={preEclampsia.date_of_pregnancies_with_pe}
-            title={"date of pregnancies with pe"}
-          />
+          {preEclampsia.date_of_pregnancies_with_pe
+            ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
+                if (date) {
+                  return (
+                    <ArticalInfo
+                      key={index}
+                      description={date}
+                      title={`date of pregnancies with pe #${index + 1}`}
+                    />
+                  );
+                }
+              })
+            : null}
 
           <ArticalInfo
             description={preEclampsia.fate_of_the_pregnancy}
