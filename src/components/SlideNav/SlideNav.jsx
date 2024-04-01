@@ -5,7 +5,7 @@ import * as svgs from "../SVG/svgTags";
 import { useDispatch, useSelector } from "react-redux";
 import { fixPatientCode, setPatientId } from "../../store/slices/patientSlice";
 import { MdHistory } from "react-icons/md";
-import QRCode from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function SlideNav() {
   const { patientCode, data, id } = useSelector((state) => state.patient);
@@ -83,10 +83,13 @@ export default function SlideNav() {
 
           {patientCode && (
             <>
-              <QRCode
+              <QRCodeCanvas
                 id="qr-code"
-                level="Q"
-                value={`${window.location.origin}/patient/personal-information/${patientCode}`}
+                value={encodeURI(
+                  `${window.location.origin}/patient/personal-information/${patientCode}`
+                )}
+                size={100}
+                level={"Q"}
                 className=" hidden"
               />
               <PatientCard
