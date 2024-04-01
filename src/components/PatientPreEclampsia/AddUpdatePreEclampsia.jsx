@@ -179,13 +179,6 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
             />
           ))}
 
-          {/* <InputInfo
-            form={formik}
-            name={"date_of_pregnancies_with_pe"}
-            title={"date of pregnancies with pe"}
-            type="date"
-          /> */}
-
           <div className={`flex flex-col font-medium gap-1  capitalize `}>
             <label htmlFor={"fate_of_the_pregnancy"} className="text-base ">
               history of pre-eclampsia

@@ -59,7 +59,7 @@ export default function PatientPreEclampsia() {
           />
 
           {preEclampsia.date_of_pregnancies_with_pe &&
-          preEclampsia.date_of_pregnancies_with_pe.length
+          typeof preEclampsia.date_of_pregnancies_with_pe === "object"
             ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
                 if (date) {
                   return (
