@@ -276,7 +276,8 @@ export const PreEclampsia = ({ preEclampsia }) => {
         title={"number of pregnancies with pe"}
       />
 
-      {preEclampsia.date_of_pregnancies_with_pe &&
+      {preEclampsia &&
+      preEclampsia.date_of_pregnancies_with_pe &&
       preEclampsia.date_of_pregnancies_with_pe.length
         ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
             if (date) {

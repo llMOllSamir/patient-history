@@ -33,7 +33,10 @@ const patientHistorySlice = createSlice({
       state.loading = false;
       state.error = null;
       payload.forEach((element) => {
-        if (element.preEclampsia.date_of_pregnancies_with_pe.length) {
+        if (
+          element.preEclampsia &&
+          element.preEclampsia.date_of_pregnancies_with_pe.length
+        ) {
           element.preEclampsia.date_of_pregnancies_with_pe = element
             .preEclampsia.date_of_pregnancies_with_pe
             ? JSON.parse(element.preEclampsia.date_of_pregnancies_with_pe)
