@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
 import * as svgs from "../SVG/svgTags";
@@ -8,18 +8,6 @@ import { MdHistory } from "react-icons/md";
 import QRCode from "qrcode.react";
 
 export default function SlideNav() {
-  const printQRCode = () => {
-    const qrCodeDataUrl = document.getElementById("qr-code").toDataURL();
-    const windowContent = "<!DOCTYPE html>";
-    const printWindow = window.open("", "", "width=800,height=600");
-    printWindow.document.open();
-    printWindow.document.write(
-      `${windowContent}<img src="${qrCodeDataUrl}" style="width:100%;" />`
-    );
-    printWindow.document.close();
-    printWindow.print();
-  };
-
   const { patientCode, data, id } = useSelector((state) => state.patient);
 
   const pCode = localStorage.getItem("patientCode");
@@ -92,13 +80,23 @@ export default function SlideNav() {
           >
             Print ID card
           </button>
+
           {patientCode && (
-            <QRCode
-              id="qr-code"
-              level="Q"
-              value={`Patient Code is ${patientCode}`}
-              style={{ display: "none" }}
-            />
+            <>
+              <QRCode
+                id="qr-code"
+                level="Q"
+                value={`${window.location.origin}/patient/personal-information/${patientCode}`}
+                className=" hidden"
+              />
+              <PatientCard
+                name={data.name}
+                code={patientCode}
+                age={data.age}
+                phone={data.phone_number}
+                address={data.address}
+              />
+            </>
           )}
         </div>
       ) : (
@@ -200,3 +198,80 @@ export default function SlideNav() {
     </aside>
   );
 }
+
+function PatientCard({ name, code, phone, age, address }) {
+  const [qrCodeDataUrl, setQRCodeDataUrl] = useState("");
+
+  useEffect(() => {
+    // Function to generate QR code data URL
+    const generateQRCodeDataUrl = () => {
+      const canvas = document.getElementById("qr-code");
+      const dataUrl = canvas.toDataURL(); // Get data URL of the canvas
+      setQRCodeDataUrl(dataUrl);
+    };
+
+    // Generate QR code data URL when component mounts
+    generateQRCodeDataUrl();
+  }, [code]); // Re-run effect when the 'code' prop changes
+  return (
+    <section
+      className="px-4 py-4 bg-white max-md:px-5 hidden"
+      id="patient-card"
+    >
+      <div
+        className="px-4 py-4 flex gap-5  max-md:gap-0 bg-white border-2 border-solid border-black rounded"
+        style={{ width: "450px" }}
+      >
+        <div className="flex w-6/12 flex-col text-black mt-2">
+          <h1 className="text-xl font-bold text-blue-700 max-md:text-4xl capitalize">
+            {name}
+          </h1>
+          <p className="mt-3">
+            <span className="font-bold">Age:</span> {age} Years
+          </p>
+          <p>
+            <span className="font-bold">Code:</span> {code}
+          </p>
+          <p>
+            <span className="font-bold">Phone:</span> {phone}
+          </p>
+          <p>
+            <span className="font-bold">Address:</span> {address}
+          </p>
+        </div>
+
+        {qrCodeDataUrl && (
+          <img
+            src={qrCodeDataUrl}
+            alt="QR Code"
+            className="w-5/12 mx-auto my-auto"
+          />
+        )}
+      </div>
+    </section>
+  );
+}
+
+const printQRCode = () => {
+  const node = document.getElementById("patient-card");
+
+  const windowContent = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+      <title>Print</title>
+    </head>
+    <body>
+      ${node.innerHTML}
+    </body>
+    </html>`;
+  const printWindow = window.open("", "", "width=450,height=500");
+
+  printWindow.document.open();
+  printWindow.document.write(windowContent);
+  printWindow.document.close();
+
+  printWindow.print();
+};
