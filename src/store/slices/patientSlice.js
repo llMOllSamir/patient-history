@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { data: null, patientCode: null, id: null };
+const initialState = { data: null, patientCode: null };
 
 const patientSlice = createSlice({
   name: "patient",
@@ -9,6 +9,11 @@ const patientSlice = createSlice({
     // set patient data
     setPatientData: (state, { payload }) => {
       state.data = payload;
+      if (payload) {
+        localStorage.setItem("patientData", JSON.stringify(payload));
+      } else {
+        localStorage.removeItem("patientData");
+      }
     },
     // fix patient Code
     fixPatientCode: (state, { payload }) => {
@@ -19,22 +24,9 @@ const patientSlice = createSlice({
       state.patientCode = null;
       localStorage.removeItem("patientCode");
     },
-    emptyPatientID: (state) => {
-      state.id = null;
-      localStorage.removeItem("patientID");
-    },
-    setPatientId: (state, { payload }) => {
-      state.id = payload.id;
-      localStorage.setItem("patientID", JSON.stringify(payload.id));
-    },
   },
 });
 
-export const {
-  fixPatientCode,
-  emptyPatientCode,
-  setPatientData,
-  setPatientId,
-  emptyPatientID,
-} = patientSlice.actions;
+export const { fixPatientCode, emptyPatientCode, setPatientData } =
+  patientSlice.actions;
 export default patientSlice.reducer;

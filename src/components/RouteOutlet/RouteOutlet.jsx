@@ -1,21 +1,20 @@
 import React, { useEffect } from "react";
 import DashboredHeader from "../DashboredHeader/DashboredHeader";
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 
 export default function RouteOutlet({ title = "", route = "" }) {
   const { pathname } = useLocation();
-
-  const { id } = useParams();
   // get patient data
-  const { patientCode } = useSelector((state) => state.patient);
+  const { data } = useSelector((state) => state.patient);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (!id && !patientCode && !pathname.endsWith("new-patient")) {
-      navigate("/");
+    if (data === null && pathname === `/patient/${route}`) {
+      navigate("/patient/search");
     }
-  }, [id, navigate, patientCode, pathname]);
+  }, [navigate, pathname, route, data]);
 
   return (
     <section className="grow">

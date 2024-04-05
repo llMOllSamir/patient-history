@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
 import { MdAdd, MdEdit } from "react-icons/md";
-import { setPatientId } from "../../store/slices/patientSlice";
 import { getObstetrics } from "../../store/slices/obstetricsSlice";
 
 export default function PatientObstetricsHistory() {
@@ -18,7 +17,6 @@ export default function PatientObstetricsHistory() {
   useEffect(() => {
     dispatech(getObstetrics({ id: Number(id) })).then((res) => {
       if (res.payload.id) {
-        dispatech(setPatientId({ id: Number(res.payload.patient_id) }));
       }
     });
   }, [dispatech, id]);
@@ -86,9 +84,8 @@ export default function PatientObstetricsHistory() {
 const ArticalInfo = ({ title, description, col, phone = null }) => {
   return (
     <article
-      className={`flex flex-col font-medium capitalize ${
-        col && `md:col-span-${col}`
-      }`}
+      className={`flex flex-col font-medium capitalize ${col && `md:col-span-${col}`
+        }`}
     >
       <h3 className=" text-black   text-xl">{title || ""}</h3>
       {phone ? (

@@ -12,7 +12,6 @@ import { useLogout } from "../../hooks/auth";
 import { logout } from "../../store/slices/authSlice";
 import {
   emptyPatientCode,
-  emptyPatientID,
 } from "../../store/slices/patientSlice";
 
 export default function Home() {
@@ -23,7 +22,6 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(emptyPatientCode());
-    dispatch(emptyPatientID())
   }, [dispatch])
 
   const onSuccess = () => {
@@ -57,7 +55,7 @@ export default function Home() {
             <>
               <Link
                 className="border rounded-lg px-5 py-2 flex items-center justify-center gap-3"
-                to={"/patient/personal-information/new-patient"}
+                to={"/patient/personal-information/add"}
               >
                 <VscDiffAdded size={"1.5rem"} /> Add Patient
               </Link>
@@ -97,7 +95,7 @@ export default function Home() {
                   <button className="  hover:bg-gray-400 flex justify-center py-1  w-full  " onClick={refetch}>Logout</button>
                   <Link
                     className="  w-full flex justify-center hover:bg-gray-400  py-1  items-center gap-3 "
-                    to={"/patient/personal-information/new-patient"}
+                    to={"/patient/personal-information/add"}
                   >
                     <VscDiffAdded size={"1.5rem"} /> Add Patient
                   </Link>

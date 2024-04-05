@@ -9,6 +9,7 @@ export default function Layout() {
   const { pathname } = useLocation();
   const dispatch = useDispatch()
   const { token } = useSelector(state => state.auth)
+
   //  get user data
   const getUserData = useCallback(async () => {
     await fetching().get("/auth/user")
@@ -28,7 +29,7 @@ export default function Layout() {
       getUserData(token)
     }
   }, [token, getUserData])
-
+  
   // check token in local storage 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -36,6 +37,7 @@ export default function Layout() {
     }
   }, [dispatch])
 
+  
   return <>
     <Helmet>
       <title>

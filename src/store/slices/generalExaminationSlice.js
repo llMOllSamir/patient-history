@@ -1,35 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Http from "../../fetchingRequest";
-import { toast } from "react-toastify";
 import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  generalExamination: {
-    height: null,
-    pulse: null,
-    weight: null,
-    random_blood_sugar: null,
-    blood_pressure: null,
-  },
+  generalExamination: null,
   error: null,
-  newGeneralExamination: [],
 };
 
-// Get General Examination data
-export const getGeneralExamination = createAsyncThunk(
-  "generalExamination/getGeneralExamination",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/general-examination/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
-
-// Get General Examination data
+// update General Examination data
 export const updateGeneralExamination = createAsyncThunk(
   "generalExamination/updateGeneralExamination",
   async ({ id, data }, { rejectWithValue }) => {
@@ -67,11 +46,8 @@ const generalExaminationSlice = createSlice({
   initialState,
   reducers: {
     // Add general examination data
-    addGeneralExaminationData: (state, { payload }) => {
-      state.newGeneralExamination = payload;
-    },
-    clearNewGeneralExaminationData: (state) => {
-      Object.assign(state, initialState);
+    setGenralExamination: (state, { payload }) => {
+      state.generalExamination = payload;
     },
   },
   extraReducers: (builder) => {
@@ -89,23 +65,8 @@ const generalExaminationSlice = createSlice({
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getGeneralExamination.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(getGeneralExamination.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.error = null;
-      state.generalExamination = payload;
-    });
-    builder.addCase(getGeneralExamination.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
-      state.loading = false;
-      state.error = payload;
-    });
   },
 });
 
-export const { addGeneralExaminationData, clearNewGeneralExaminationData } =
-  generalExaminationSlice.actions;
+export const { setGenralExamination } = generalExaminationSlice.actions;
 export default generalExaminationSlice.reducer;

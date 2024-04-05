@@ -2,64 +2,57 @@ import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
 import * as svgs from "../SVG/svgTags";
-import { useDispatch, useSelector } from "react-redux";
-import { fixPatientCode, setPatientId } from "../../store/slices/patientSlice";
+import { useSelector } from "react-redux";
 import { MdHistory } from "react-icons/md";
 import { QRCodeCanvas } from "qrcode.react";
+import { CiSearch } from "react-icons/ci";
 
 export default function SlideNav() {
-  const { patientCode, data, id } = useSelector((state) => state.patient);
-
-  const pCode = localStorage.getItem("patientCode");
-  const pID = localStorage.getItem("patientID");
-
-  const dispatch = useDispatch();
-  if (!patientCode && pCode) {
-    dispatch(fixPatientCode(parseInt(pCode)));
-  }
-  if (!id && pID) {
-    dispatch(setPatientId({ id: parseInt(pID) }));
-  }
-
+  const { patientCode, data } = useSelector((state) => state.patient);
   const { pathname } = useLocation();
 
-  const links = [
-    {
-      title: "Personal Information",
-      ref: `personal-information/${patientCode || ""}`,
-      logo: svgs.Information,
-    },
-    {
-      title: "General Examination",
-      ref: `General-examination/${id || ""}`,
-      logo: svgs.Examination,
-    },
-    {
-      title: "Gynecological history",
-      ref: `gynecological-history/${id || ""}`,
-      logo: svgs.Gynecological,
-    },
-    {
-      title: "Obstetrics history",
-      ref: `obstetrics-history/${id || ""}`,
-      logo: svgs.Obstetrics,
-    },
+  const links = [{
+    title: "Search",
+    ref: `search`,
+    logo: CiSearch,
+  },
+  {
+    title: "Personal Information",
+    ref: `personal-information/${patientCode || ""}`,
+    logo: svgs.Information,
+  },
+  {
+    title: "General Examination",
+    ref: `General-examination/${data?.id || ""}`,
+    logo: svgs.Examination,
+  },
+  {
+    title: "Gynecological history",
+    ref: `gynecological-history/${data?.id || ""}`,
+    logo: svgs.Gynecological,
+  },
+  {
+    title: "Obstetrics history",
+    ref: `obstetrics-history/${data?.id || ""}`,
+    logo: svgs.Obstetrics,
+  },
   ];
+
   const oncology = [
     {
       title: "Cervical Cancer",
-      ref: `cervical/${id || ""}`,
+      ref: `cervical/${data?.id || ""}`,
       logo: svgs.Cervical,
     },
-    { title: "Breast Cancer", ref: `breast/${id || ""}`, logo: svgs.Breast },
+    { title: "Breast Cancer", ref: `breast/${data?.id || ""}`, logo: svgs.Breast },
     {
       title: "Ovarian Cancer",
-      ref: `ovarian/${id || ""}`,
+      ref: `ovarian/${data?.id || ""}`,
       logo: svgs.Ovarian,
     },
     {
       title: "Uterine Cancer",
-      ref: `uterine/${id || ""}`,
+      ref: `uterine/${data?.id || ""}`,
       logo: svgs.Uterine,
     },
   ];
@@ -120,13 +113,13 @@ export default function SlideNav() {
               key={index}
             >
               <NavLink
-                className={`flex justify-start items-center gap-2  ${
-                  pathname.split("/").includes(link.ref.split("/")[0]) &&
+                className={`flex justify-start items-center gap-2  ${pathname.split("/").includes(link.ref.split("/")[0]) &&
                   "active"
-                } `}
+                  } `}
                 to={link.ref}
               >
                 <link.logo
+                  size={"1.5rem"}
                   fill={
                     pathname.split("/").includes(link.ref.split("/")[0])
                       ? "#773479"
@@ -137,6 +130,7 @@ export default function SlideNav() {
               </NavLink>
             </li>
           ))}
+
           <li className=" flex justify-start  w-full">
             <ul className="w-full">
               <p className="block sm:px-10 text-start w-full my-2 font-bold text-xl">
@@ -160,10 +154,11 @@ export default function SlideNav() {
               ))}
             </ul>
           </li>
+
           <li className="sm:px-10  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={`Osteoporosis/${id || ""}`}
+              to={`Osteoporosis/${data?.id || ""}`}
             >
               <svgs.Osteoporosis
                 fill={pathname.includes("Osteoporosis") ? "#773479" : "white"}
@@ -171,10 +166,11 @@ export default function SlideNav() {
               Osteoporosis
             </NavLink>
           </li>
+
           <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={`Pre-eclampsia/${id || ""}`}
+              to={`Pre-eclampsia/${data?.id || ""}`}
             >
               <svgs.Eclampsia
                 fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}
@@ -182,10 +178,11 @@ export default function SlideNav() {
               Pre-eclampsia
             </NavLink>
           </li>
+
           <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-red-900 ">
             <NavLink
               className={`flex justify-start items-center gap-2`}
-              to={`patient-history/${id || ""}`}
+              to={`patient-history/${data?.id || ""}`}
             >
               <MdHistory
                 color={
@@ -216,6 +213,7 @@ function PatientCard({ name, code, phone, age, address }) {
     // Generate QR code data URL when component mounts
     generateQRCodeDataUrl();
   }, [code]); // Re-run effect when the 'code' prop changes
+
   return (
     <section
       className="px-4 py-4 bg-white max-md:px-5 hidden"

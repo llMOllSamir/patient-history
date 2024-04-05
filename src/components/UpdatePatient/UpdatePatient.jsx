@@ -2,11 +2,9 @@ import React from 'react'
 import styles from "./UpdatePatient.module.css";
 import { useFormik } from 'formik';
 import * as yup from "yup"
-import { useDispatch, useSelector } from 'react-redux';
-import { emptyPatientCode, fixPatientCode, setPatientData } from '../../store/slices/patientSlice';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useGetPatient, useUpdatePatient } from '../../hooks/patient';
-import LoadingPatient from '../../LoadingPatient';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useUpdatePatient } from '../../hooks/patient';
 import { ImSpinner6 } from "react-icons/im";
 import notify from '../../utilities/alert-toastify';
 

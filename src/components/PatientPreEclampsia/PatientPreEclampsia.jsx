@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
 import { MdAdd, MdEdit } from "react-icons/md";
-import { setPatientId } from "../../store/slices/patientSlice";
 import { getPreEclampsia } from "../../store/slices/preEclampsiaSlice";
 
 export default function PatientPreEclampsia() {
@@ -19,7 +18,6 @@ export default function PatientPreEclampsia() {
   useEffect(() => {
     dispatech(getPreEclampsia({ id: Number(id) })).then((res) => {
       if (res.payload.id) {
-        dispatech(setPatientId({ id: Number(res.payload.patient_id) }));
       }
     });
   }, [dispatech, id]);
@@ -59,18 +57,18 @@ export default function PatientPreEclampsia() {
           />
 
           {preEclampsia.date_of_pregnancies_with_pe &&
-          typeof preEclampsia.date_of_pregnancies_with_pe === "object"
+            typeof preEclampsia.date_of_pregnancies_with_pe === "object"
             ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
-                if (date) {
-                  return (
-                    <ArticalInfo
-                      key={index}
-                      description={date}
-                      title={`date of pregnancies with pe #${index + 1}`}
-                    />
-                  );
-                }
-              })
+              if (date) {
+                return (
+                  <ArticalInfo
+                    key={index}
+                    description={date}
+                    title={`date of pregnancies with pe #${index + 1}`}
+                  />
+                );
+              }
+            })
             : null}
 
           <ArticalInfo
@@ -111,9 +109,8 @@ export default function PatientPreEclampsia() {
 const ArticalInfo = ({ title, description, col, phone = null }) => {
   return (
     <article
-      className={`flex flex-col font-medium capitalize ${
-        col && `md:col-span-${col}`
-      }`}
+      className={`flex flex-col font-medium capitalize ${col && `md:col-span-${col}`
+        }`}
     >
       <h3 className=" text-black   text-xl">{title || ""}</h3>
       {phone ? (

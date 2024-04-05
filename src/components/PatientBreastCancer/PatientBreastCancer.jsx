@@ -5,8 +5,7 @@ import { useEffect } from "react";
 import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
 import { MdAdd, MdEdit } from "react-icons/md";
-import { setPatientId } from "../../store/slices/patientSlice";
-import { getBreast } from "../../store/slices/breastSlice";
+ import { getBreast } from "../../store/slices/breastSlice";
 
 export default function PatientBreastCancerHistory() {
   const { id } = useParams();
@@ -16,8 +15,7 @@ export default function PatientBreastCancerHistory() {
   useEffect(() => {
     dispatech(getBreast({ id: Number(id) })).then((res) => {
       if (res.payload.id) {
-        dispatech(setPatientId({ id: Number(res.payload.patient_id) }));
-      }
+       }
     });
   }, [dispatech, id]);
 

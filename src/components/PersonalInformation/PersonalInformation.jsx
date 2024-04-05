@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./PersonalInformation.module.css";
 import { MdEdit } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useGetPatient } from "../../hooks/patient";
 import LoadingPatient from "../../LoadingPatient";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,28 +10,27 @@ import {
   emptyPatientCode,
   fixPatientCode,
   setPatientData,
-  setPatientId,
 } from "../../store/slices/patientSlice";
 
 export default function PersonalInformation() {
   const { id } = useParams();
   const dispatech = useDispatch();
   // get patient data
-  const { data, patientCode } = useSelector((state) => state.patient);
+  const { data } = useSelector((state) => state.patient);
   const { user } = useSelector((state) => state.auth);
-
   // fetch data success
   const onSuccess = (data) => {
     dispatech(fixPatientCode(data.data.patient_code));
     dispatech(setPatientData(data.data));
-    dispatech(setPatientId({ id: data.data.id }));
   };
+  // fetch data Error
   const onError = (error) => {
     dispatech(setPatientData(null));
-    dispatech(fixPatientCode(null));
+    dispatech(emptyPatientCode());
   }
+  // fetch data
   const { isLoading, error, isError } = useGetPatient({
-    code: id || patientCode,
+    code: id,
     onSuccess,
     onError
   });
@@ -39,10 +38,11 @@ export default function PersonalInformation() {
   if (isLoading) {
     return <LoadingPatient />;
   }
+
   if (isError) {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
-        <h2 className="font-bold text-red-500 text-3xl">
+        <h2 className="font-bold text-red-500 text-lg md:text-3xl">
           {error.response.data.error}
         </h2>
         <Link
@@ -50,7 +50,7 @@ export default function PersonalInformation() {
             dispatech(emptyPatientCode());
           }}
           to={"/patient/personal-information"}
-          className="bg-fuchsia-900 text-lg px-3 text-white rounded-lg py-2"
+          className="bg-fuchsia-900  text-sm md:text-lg px-3 text-white rounded-lg py-2"
         >
           Search With Code
         </Link>
@@ -109,7 +109,7 @@ export default function PersonalInformation() {
         </div>
         <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
           {user && user.role === "doctor" && <Link
-            to={`/patient/personal-information/update-patient/${data.patient_code}`}
+            to={`/patient/personal-information/update`}
             className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
           >
             <MdEdit />
