@@ -4,27 +4,9 @@ import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  obstetrics: {
-    gravidity: null,
-    parity: null,
-    abortion: null,
-    notes: null,
-  },
+  obstetrics: null,
   error: null,
 };
-
-// Get Obstetrics History data
-export const getObstetrics = createAsyncThunk(
-  "obstetrics/getObstetrics",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/obstetrics/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
 
 export const updateObstetrics = createAsyncThunk(
   "obstetrics/updateObstetrics",
@@ -62,8 +44,8 @@ const obstetricsSlice = createSlice({
   name: "obstetrics",
   initialState,
   reducers: {
-    clearObstetricsData: (state) => {
-      Object.assign(state, initialState);
+    setObstetrics: (state, { payload }) => {
+      state.obstetrics = payload;
     },
   },
   extraReducers: (builder) => {
@@ -80,23 +62,9 @@ const obstetricsSlice = createSlice({
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getObstetrics.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(getObstetrics.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.error = null;
-      state.obstetrics = payload;
-    });
-    builder.addCase(getObstetrics.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
-      state.loading = false;
-      state.error = payload;
-    });
   },
 });
 
-export const { addObstetricsData, clearObstetricsData } =
+export const {setObstetrics} =
   obstetricsSlice.actions;
 export default obstetricsSlice.reducer;

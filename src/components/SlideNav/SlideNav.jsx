@@ -18,7 +18,7 @@ export default function SlideNav() {
   },
   {
     title: "Personal Information",
-    ref: `personal-information/${patientCode || ""}`,
+    ref: `personal-information/${data?.patient_code || ""}`,
     logo: svgs.Information,
   },
   {
