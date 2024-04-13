@@ -41,21 +41,29 @@ export default function AddUpdateObstetricsHistory({ state = "update" }) {
     },
     validationSchema,
     onSubmit: (values) => {
-
-      dispatech(
-        addObstetrics({
-          data: {
-            patient_id: data.id, ...values,
+      if (state === "update") {
+        dispatech(updateObstetrics({ id: data?.id, data: { patient_id: data?.id, ...values } })).then(response => {
+          if (response.payload.examination) {
+            navigate(
+              `/patient/obstetrics-history/${data?.id}`
+            );
           }
         })
-      ).then((response) => {
-        if (response.payload.obstetric) {
-          navigate(
-            `/patient/obstetrics-history/${data.id}`
-          );
-        }
-      });
-
+      } else {
+        dispatech(
+          addObstetrics({
+            data: {
+              patient_id: data?.id, ...values,
+            }
+          })
+        ).then((response) => {
+          if (response.payload.obstetric) {
+            navigate(
+              `/patient/obstetrics-history/${data?.id}`
+            );
+          }
+        });
+      }
     },
   });
 

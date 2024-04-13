@@ -4,26 +4,9 @@ import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  breast: {
-    age: null,
-    family_history: null,
-    recommendations: null,
-  },
+  breast: null,
   error: null,
 };
-
-// Get Breast History data
-export const getBreast = createAsyncThunk(
-  "breast/getBreastAsync",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/breast/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
 
 export const updateBreast = createAsyncThunk(
   "breast/updateBreastAsync",
@@ -61,8 +44,8 @@ const breastSlice = createSlice({
   name: "breast",
   initialState,
   reducers: {
-    clearBreastData: (state) => {
-      Object.assign(state, initialState);
+    setBreastData: (state, { payload }) => {
+      state.breast = payload || null;
     },
   },
   extraReducers: (builder) => {
@@ -79,22 +62,21 @@ const breastSlice = createSlice({
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getBreast.pending, (state) => {
+    builder.addCase(updateBreast.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(getBreast.fulfilled, (state, { payload }) => {
+    builder.addCase(updateBreast.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
-      state.breast = payload;
+      state.breast = payload.examination;
     });
-    builder.addCase(getBreast.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
+    builder.addCase(updateBreast.rejected, (state) => {
       state.loading = false;
-      state.error = payload;
+      state.error = true;
     });
   },
 });
 
-export const { clearBreastData } = breastSlice.actions;
+export const { setBreastData } = breastSlice.actions;
 export default breastSlice.reducer;

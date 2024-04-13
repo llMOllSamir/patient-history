@@ -4,31 +4,9 @@ import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  ovarian: {
-    breast_cancer_history: null,
-    relatives_with_ovarian_cancer: null,
-    gene_mutation_or_lynch_syndrome: null,
-    tvs_result: null,
-    tvs_comment: null,
-    "ca-125_result": null,
-    "ca-125_comment": null,
-    recommendations: null,
-  },
+  ovarian: null,
   error: null,
 };
-
-// Get ovarian History data
-export const getOvarian = createAsyncThunk(
-  "ovarian/getOvarianAsync",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/ovarian/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
 
 export const updateOvarian = createAsyncThunk(
   "ovarian/updateOvarianAsync",
@@ -50,13 +28,12 @@ export const addOvarian = createAsyncThunk(
   "ovarian/addOvarianAsync",
   async ({ data }, { rejectWithValue }) => {
     try {
-      const response = await Http().post(`/ovarian/`, data);
+      const response = await Http().post(`/ovarian`, data);
       if (response.status === 201) {
-        notify("تم إضافة الفحص بنجاح", "success");
       }
       return response.data;
     } catch (error) {
-      notify("حدث خطأ أثناء تحديث الفحص", "error");
+      console.log(error);
       return rejectWithValue(error.message);
     }
   }
@@ -66,8 +43,8 @@ const ovarianSlice = createSlice({
   name: "ovarian",
   initialState,
   reducers: {
-    clearOvarianData: (state) => {
-      Object.assign(state, initialState);
+    setOvarian: (state, { payload }) => {
+      state.ovarian = payload;
     },
   },
   extraReducers: (builder) => {
@@ -78,28 +55,28 @@ const ovarianSlice = createSlice({
     builder.addCase(addOvarian.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
-      state.ovarian = payload.examination;
     });
     builder.addCase(addOvarian.rejected, (state) => {
+      notify("حدث خطأ أثناء اضافه الفحص", "error");
+
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getOvarian.pending, (state) => {
+    builder.addCase(updateOvarian.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(getOvarian.fulfilled, (state, { payload }) => {
+    builder.addCase(updateOvarian.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
-      state.ovarian = payload;
     });
-    builder.addCase(getOvarian.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
+    builder.addCase(updateOvarian.rejected, (state) => {
       state.loading = false;
-      state.error = payload;
+      state.error = true;
+      notify("حدث خطأ أثناء تحديث الفحص", "error");
     });
   },
 });
 
-export const { clearOvarianData } = ovarianSlice.actions;
+export const { setOvarian } = ovarianSlice.actions;
 export default ovarianSlice.reducer;

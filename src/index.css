@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar-thumb {
+  @apply bg-fuchsia-900 rounded-full;
+}
+::-webkit-scrollbar {
+  background-color: transparent;
+  @apply w-3 h-2;
+}

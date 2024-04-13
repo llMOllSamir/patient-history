@@ -2,37 +2,33 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import LoadingPatient from "../../LoadingPatient";
+import { Link, useNavigate } from "react-router-dom";
 import { ImSpinner6 } from "react-icons/im";
-import { useEffect } from "react";
-import { MdAdd } from "react-icons/md";
-import {
-  addOsteoporosis,
-  clearOsteoporosisData,
-  getOsteoporosis,
-  updateOsteoporosis,
-} from "../../store/slices/osteoporosisSlice";
+
 import {
   addBreast,
-  clearBreastData,
-  getBreast,
   updateBreast,
 } from "../../store/slices/breastSlice";
 
-export default function AddUpdateBreastCancerHistory({ state = "update" }) {
-  const { id } = useParams();
-  const dispatech = useDispatch();
 
+export default function AddUpdateBreastCancerHistory({ state = "update" }) {
+  const dispatech = useDispatch();
+  const navigate = useNavigate();
+  const { breast, loading, error } = useSelector((state) => state.breast);
+  const { data: patient } = useSelector((state) => state.patient);
+
+
+
+  // vaildation schema 
   const validationSchema = yup.object({
     age: yup.number("Must be number!").moreThan(0, "Age must be > 0"),
     family_history: yup.string(),
   });
 
-  const { breast, loading, error } = useSelector((state) => state.breast);
-  const patient = useSelector((state) => state.patient);
 
-  const navigate = useNavigate();
+
+
+  // handle form 
   const formik = useFormik({
     initialValues: {
       age: breast.age || "",
@@ -44,7 +40,7 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
         dispatech(
           updateBreast({
             id: Number(breast.id),
-            data: { patient_id: id, ...values },
+            data: { patient_id: patient?.id, ...values },
           })
         ).then((response) => {
           if (response.payload.examination) {
@@ -56,7 +52,7 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
       } else {
         dispatech(
           addBreast({
-            data: { patient_id: patient.id, ...values },
+            data: { patient_id: patient?.id, ...values },
           })
         ).then((response) => {
           if (response.payload.examination) {
@@ -69,28 +65,10 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
     },
   });
 
-  useEffect(() => {
-    if (state === "update") {
-      dispatech(getBreast({ id: Number(id) }));
-    } else {
-      dispatech(clearBreastData());
-    }
-  }, [dispatech, id]);
 
-  useEffect(() => {
-    // Set initial values for formik after osteoporosis data is fetched
-    if (breast) {
-      formik.setValues({
-        age: breast.age || "",
-        family_history: breast.family_history || "",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [breast]);
 
-  if (loading) {
-    return <LoadingPatient />;
-  }
+
+
   if (error) {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
@@ -107,64 +85,54 @@ export default function AddUpdateBreastCancerHistory({ state = "update" }) {
     );
   }
 
-  if (breast) {
-    return (
-      <form onSubmit={formik.handleSubmit} className="select-none">
-        <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <div className={`flex flex-col font-medium gap-1  capitalize `}>
-            <label htmlFor={"family_history"} className="text-base">
-              family history
-            </label>
-            <select
-              value={formik.values.family_history}
-              name="family_history"
-              id="family_history"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `}
-            >
-              {[
-                "negative",
-                "positive in second degree relatives (any number)",
-                "positive in one first degree relatives",
-                "positive in more than one first degree relatives",
-              ].map((state, index) => (
-                <option
-                  key={index}
-                  className="capitalize cursor-pointer"
-                  value={state}
-                >
-                  {state}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
-          <button
-            type="submit"
-            className="rounded-lg text-white bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2"
+  return (
+    <form onSubmit={formik.handleSubmit} className="select-none">
+      <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
+        <div className={`flex flex-col font-medium gap-1  capitalize `}>
+          <label htmlFor={"family_history"} className="text-base">
+            family history
+          </label>
+          <select
+            value={formik.values.family_history}
+            name="family_history"
+            id="family_history"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg  xl:w-1/2 w-full `}
           >
-            {loading ? (
-              <ImSpinner6 className="animate-spin " size={"1.6rem"} />
-            ) : (
-              "Save"
-            )}
-          </button>
+            <option className="capitalize cursor-pointer" value={""}>
+              Select State
+            </option>
+            {[
+              "negative",
+              "positive in second degree relatives (any number)",
+              "positive in one first degree relatives",
+              "positive in more than one first degree relatives",
+            ].map((state, index) => (
+              <option
+                key={index}
+                className="capitalize cursor-pointer"
+                value={state}
+              >
+                {state}
+              </option>
+            ))}
+          </select>
         </div>
-      </form>
-    );
-  } else {
-    return (
-      <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
-        <Link
-          to={`/patient/breast/add/`}
-          className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
-        >
-          <MdAdd />
-          Edit
-        </Link>
       </div>
-    );
-  }
+      <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
+        <button
+          type="submit"
+          className="rounded-lg text-white bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2"
+        >
+          {loading ? (
+            <ImSpinner6 className="animate-spin " size={"1.6rem"} />
+          ) : (
+            "Save"
+          )}
+        </button>
+      </div>
+    </form>
+  );
+
 }

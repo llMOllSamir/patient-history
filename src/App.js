@@ -113,7 +113,7 @@ function App() {
               path: "obstetrics-history",
               element: (
                 <RouteOutlet
-                title="Obstetrics history"
+                  title="Obstetrics history"
                   route="obstetrics-history"
                 />
               ),
