@@ -41,7 +41,12 @@ function App() {
           children: [
             {
               path: "search",
-              element: <Search />,
+              element: (
+                <ProtectedRoute>
+                  <RouteOutlet title="Search" route="search" />{" "}
+                </ProtectedRoute>
+              ),
+              children: [{ index: true, element: <Search /> }],
             },
             {
               path: "personal-information",
