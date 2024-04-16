@@ -26,6 +26,9 @@ import AddUpdateOvarianCancer from "./components/PatientOvarianCancer/AddUpdateO
 import ProtectedRoute from "./ProtectedRoute";
 import PatientHistory from "./components/PatientHistory/PatientHistory";
 import Search from "./components/Search/Search";
+import GynecologicalHistory from "./components/GynecologicalHistory/GynecologicalHistory";
+import UpdateGynecologicalHistory from "./components/GynecologicalHistory/UpdateGynecologicalHistory";
+import AddGynecologicalHistory from "./components/GynecologicalHistory/AddGynecologicalHistory";
 
 function App() {
   const routes = createBrowserRouter([
@@ -43,7 +46,7 @@ function App() {
               path: "search",
               element: (
                 <ProtectedRoute>
-                  <RouteOutlet title="Search" route="search" />{" "}
+                  <RouteOutlet title="Search" route="search" />
                 </ProtectedRoute>
               ),
               children: [{ index: true, element: <Search /> }],
@@ -112,7 +115,25 @@ function App() {
                   route="gynecological-history"
                 />
               ),
-              children: [{ path: "add" }, { path: "update" }, { path: ":id" }],
+              children: [
+                {
+                  path: "add",
+                  element: (
+                    <ProtectedRoute>
+                      <AddGynecologicalHistory />
+                    </ProtectedRoute>
+                  ),
+                },
+                {
+                  path: "update",
+                  element: (
+                    <ProtectedRoute>
+                      <UpdateGynecologicalHistory />
+                    </ProtectedRoute>
+                  ),
+                },
+                { path: ":id", element: <GynecologicalHistory /> },
+              ],
             },
             {
               path: "obstetrics-history",

@@ -9,12 +9,11 @@ import { CiSearch } from "react-icons/ci";
 
 export default function SlideNav() {
   const { patientCode, data } = useSelector((state) => state.patient);
-  const { user } = useSelector((state) => state.auth);
-  const { pathname } = useLocation();
+   const { pathname } = useLocation();
 
   const links = [{
     title: "Search",
-    ref: user?.role === "doctor" ? `search` : `personal-information/${data?.patient_code || ""}`
+    ref: `search`
     ,
     logo: CiSearch,
   },

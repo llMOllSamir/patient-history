@@ -23,7 +23,7 @@ export default function RouteOutlet({ title = "", route = "" }) {
         <meta name="description" content={title} />
       </Helmet>
       <DashboredHeader />
-      <h1 className="font-semibold text-3xl px-10 my-10 text-fuchsia-800">
+      <h1 className="font-semibold text-3xl select-none px-10 my-10 text-fuchsia-800">
         {title}
       </h1>
       <Outlet />

@@ -1,9 +1,7 @@
-import { createSlice, } from "@reduxjs/toolkit";
-
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  gynecologicalHistory: [],
-  newGynecologicalHistory: [],
+  gynecologicalHistory: null,
 };
 
 const gynecologicalHistorySlice = createSlice({
@@ -12,7 +10,7 @@ const gynecologicalHistorySlice = createSlice({
   reducers: {
     // Add gynecological History data
     addGynecologicalHistoryData: (state, { payload }) => {
-      state.newGynecologicalHistory = payload;
+      state.gynecologicalHistory = payload;
     },
   },
 });

@@ -9,3 +9,9 @@
   background-color: transparent;
   @apply w-3 h-2;
 }
+
+@layer components{
+  .checkedInput{
+     filter: drop-shadow(0px 0px 5px blue);
+  }
+}
