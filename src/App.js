@@ -29,6 +29,7 @@ import Search from "./components/Search/Search";
 import GynecologicalHistory from "./components/GynecologicalHistory/GynecologicalHistory";
 import UpdateGynecologicalHistory from "./components/GynecologicalHistory/UpdateGynecologicalHistory";
 import AddGynecologicalHistory from "./components/GynecologicalHistory/AddGynecologicalHistory";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 function App() {
   const routes = createBrowserRouter([
@@ -38,6 +39,7 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "/login", element: <Login /> },
+        { path: "/dashboard", element: <Dashboard /> },
         {
           path: "/patient",
           element: <PatientLayout />,
