@@ -17,4 +17,12 @@ const useLogout = ({ onSuccess }) =>
     enabled: false,
   });
 
-export { useLogin, useLogout };
+const forgetPassword = (data) => fetching().post("/forgot-password", data);
+const useForgotPassword = ({ onSuccess }) =>
+  useMutation(forgetPassword, { onSuccess });
+
+const resetPassword = (data) => fetching().post("/reset-password", data);
+const useResetPassword = ({ onSuccess }) =>
+  useMutation(resetPassword, { onSuccess });
+
+export { useLogin, useLogout, useForgotPassword, useResetPassword };

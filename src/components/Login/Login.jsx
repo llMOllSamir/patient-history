@@ -34,7 +34,7 @@ export default function Login() {
     email: string("Email Is Should Be Letters")
       .required("Email is required").email
       (),
-    password: string("Password Should Be Letters").required("Password is required").min(3),
+    password: string("Password Should Be Letters").required("Password is required").min(10),
 
   });
 
@@ -47,7 +47,6 @@ export default function Login() {
     validationSchema,
     onSubmit: (values) => {
       mutate(values)
-      // navigate("/")
     },
   });
 
@@ -81,7 +80,7 @@ export default function Login() {
         </label>
 
         <label className='-mt-4 text-sm  w-9/12  text-gray-500 '>Forget Password?
-          <Link className='text-black hover:border-b  border-black font-semibold' to={"/"} >Reset</Link>
+          <Link className='text-black hover:border-b  border-black font-semibold' to={"/forgotpassword"} >Reset</Link>
         </label>
 
 

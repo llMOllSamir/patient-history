@@ -30,6 +30,8 @@ import GynecologicalHistory from "./components/GynecologicalHistory/Gynecologica
 import UpdateGynecologicalHistory from "./components/GynecologicalHistory/UpdateGynecologicalHistory";
 import AddGynecologicalHistory from "./components/GynecologicalHistory/AddGynecologicalHistory";
 import Dashboard from "./components/Dashboard/Dashboard";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
+import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 
 function App() {
   const routes = createBrowserRouter([
@@ -39,6 +41,8 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "/login", element: <Login /> },
+        { path: "/reset", element: <ResetPassword /> },
+        { path: "/forgotpassword", element: <ForgetPassword /> },
         { path: "/dashboard", element: <Dashboard /> },
         {
           path: "/patient",
