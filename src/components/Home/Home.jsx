@@ -10,9 +10,8 @@ import { CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "../../hooks/auth";
 import { logout } from "../../store/slices/authSlice";
-import {
-  emptyPatientCode,
-} from "../../store/slices/patientSlice";
+import { emptyPatientCode } from "../../store/slices/patientSlice";
+import { MdHistory } from "react-icons/md";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(emptyPatientCode());
-  }, [dispatch])
+  }, [dispatch]);
 
   const onSuccess = () => {
     dispatch(logout());
@@ -49,10 +48,22 @@ export default function Home() {
   return (
     <section className={`${styles.home} text-white select-none `}>
       <div className="fixed inset-0 xl:mt-16 mt-5 bg-transparent h-40 flex justify-between items-center  lg:px-32 md:px-10 ">
-        <img src={logo} alt="Logo" className="w-2/6 sm:w-3/12 xl:w-2/12    aspect-square" />
+        <img
+          src={logo}
+          alt="Logo"
+          className="w-2/6 sm:w-3/12 xl:w-2/12    aspect-square"
+        />
         <div className="btn md:flex hidden justify-center items-center  gap-10  ">
           {user !== null ? (
             <>
+              {user.role === "doctor" && (
+                <Link
+                  className="border rounded-lg px-5 py-2 flex items-center justify-center gap-3"
+                  to={`/doctor/history/${user.id}`}
+                >
+                  <MdHistory size={"1.5rem"} /> Doctor history
+                </Link>
+              )}
               <Link
                 className="border rounded-lg px-5 py-2 flex items-center justify-center gap-3"
                 to={"/patient/personal-information/add"}
@@ -86,13 +97,18 @@ export default function Home() {
               setMenuOpen(!menuOpen);
             }}
           />
-          {menuOpen &&
+          {menuOpen && (
             <nav
               className={`absolute  top-full end-full  overflow-hidden w-48 h-0 py-0  rounded-2xl font-medium ${styles.dropdown}  gap-2  text-black flex flex-col justify-center items-center     bg-white`}
             >
               {user !== null ? (
                 <>
-                  <button className="  hover:bg-gray-400 flex justify-center py-1  w-full  " onClick={refetch}>Logout</button>
+                  <button
+                    className="  hover:bg-gray-400 flex justify-center py-1  w-full  "
+                    onClick={refetch}
+                  >
+                    Logout
+                  </button>
                   <Link
                     className="  w-full flex justify-center hover:bg-gray-400  py-1  items-center gap-3 "
                     to={"/patient/personal-information/add"}
@@ -101,13 +117,15 @@ export default function Home() {
                   </Link>
                 </>
               ) : (
-                <Link className="  hover:bg-gray-400 flex justify-center py-1  w-full  " to={"/login"}>
+                <Link
+                  className="  hover:bg-gray-400 flex justify-center py-1  w-full  "
+                  to={"/login"}
+                >
                   Login
                 </Link>
               )}
             </nav>
-          }
-
+          )}
         </div>
       </div>
 
