@@ -24,7 +24,7 @@ import AddUpdateBreastCancerHistory from "./components/PatientBreastCancer/AddUp
 import PatientOvarianCancerHistory from "./components/PatientOvarianCancer/PatientOvarianCancer";
 import AddUpdateOvarianCancer from "./components/PatientOvarianCancer/AddUpdateOvarianCancer";
 import ProtectedRoute from "./ProtectedRoute";
-import PatientHistory from "./components/PatientHistory/PatientHistory";
+import PatientHistory from "./components/History/PatientHistory";
 import Search from "./components/Search/Search";
 import GynecologicalHistory from "./components/GynecologicalHistory/GynecologicalHistory";
 import UpdateGynecologicalHistory from "./components/GynecologicalHistory/UpdateGynecologicalHistory";
@@ -32,6 +32,7 @@ import AddGynecologicalHistory from "./components/GynecologicalHistory/AddGyneco
 import Dashboard from "./components/Dashboard/Dashboard";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
+import DoctorHistory from "./components/History/DoctorHistory";
 
 function App() {
   const routes = createBrowserRouter([
@@ -292,6 +293,10 @@ function App() {
               ],
             },
           ],
+        },
+        {
+          path: "doctor",
+          children: [{ path: "history/:id", element: <DoctorHistory /> }],
         },
         {
           path: "*",
