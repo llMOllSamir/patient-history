@@ -9,7 +9,7 @@ import osteoporosisReducer from "./slices/osteoporosisSlice";
 import preEclampsiaReducer from "./slices/preEclampsiaSlice";
 import breastReducer from "./slices/breastSlice";
 import ovarianReducer from "./slices/ovarianSlice";
-import patientHistoryReducer from "./slices/patientHistory";
+import historyReducer from "./slices/history";
 
 const store = configureStore({
   reducer: {
@@ -23,7 +23,7 @@ const store = configureStore({
     preEclampsia: preEclampsiaReducer,
     breast: breastReducer,
     ovarian: ovarianReducer,
-    patientHistory: patientHistoryReducer,
+    history: historyReducer,
   },
 });
 
