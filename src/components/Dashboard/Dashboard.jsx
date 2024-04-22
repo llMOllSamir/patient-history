@@ -72,7 +72,7 @@ function Dashboard() {
             </span>
 
             <div className="flex overflow-x-auto flex-col text-xl rounded font-medium  text-zinc-500 max-h-[500px]">
-              {history.slice(1).map((activity, index) => (
+              {history.map((activity, index) => (
                 <ActivityItem key={index} {...activity} />
               ))}
             </div>
