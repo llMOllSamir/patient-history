@@ -4,27 +4,9 @@ import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  osteoporosis: {
-    age: null,
-    weight: null,
-    current_oestrogen_use: null,
-    recommendations: null,
-  },
+  osteoporosis: null,
   error: null,
 };
-
-// Get Osteoporosis History data
-export const getOsteoporosis = createAsyncThunk(
-  "osteoporosis/getOsteoporosis",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/osteoporosis/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
 
 export const updateOsteoporosis = createAsyncThunk(
   "osteoporosis/updateOsteoporosis",
@@ -52,6 +34,7 @@ export const addOsteoporosis = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
+      console.log(error);
       notify("حدث خطأ أثناء تحديث الفحص", "error");
       return rejectWithValue(error.message);
     }
@@ -62,10 +45,11 @@ const osteoporosisSlice = createSlice({
   name: "osteoporosis",
   initialState,
   reducers: {
-    clearOsteoporosisData: (state) => {
-      Object.assign(state, initialState);
+    setOsteoporosis: (state, { payload }) => {
+      state.osteoporosis = payload || null;
     },
   },
+
   extraReducers: (builder) => {
     builder.addCase(addOsteoporosis.pending, (state) => {
       state.loading = true;
@@ -80,22 +64,20 @@ const osteoporosisSlice = createSlice({
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getOsteoporosis.pending, (state) => {
+    builder.addCase(updateOsteoporosis.pending, (state) => {
       state.loading = true;
       state.error = null;
     });
-    builder.addCase(getOsteoporosis.fulfilled, (state, { payload }) => {
+    builder.addCase(updateOsteoporosis.fulfilled, (state, { payload }) => {
       state.loading = false;
       state.error = null;
-      state.osteoporosis = payload;
     });
-    builder.addCase(getOsteoporosis.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
+    builder.addCase(updateOsteoporosis.rejected, (state) => {
       state.loading = false;
-      state.error = payload;
+      state.error = true;
     });
   },
 });
 
-export const { clearOsteoporosisData } = osteoporosisSlice.actions;
+export const { setOsteoporosis } = osteoporosisSlice.actions;
 export default osteoporosisSlice.reducer;
