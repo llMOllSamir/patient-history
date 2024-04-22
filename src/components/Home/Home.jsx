@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "../../hooks/auth";
 import { logout } from "../../store/slices/authSlice";
 import { emptyPatientCode } from "../../store/slices/patientSlice";
-import { MdHistory } from "react-icons/md";
+import { MdDashboard, MdHistory } from "react-icons/md";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -64,6 +64,15 @@ export default function Home() {
                   <MdHistory size={"1.5rem"} /> Doctor history
                 </Link>
               )}
+              {user.role === "admin" && (
+                <Link
+                  className="border rounded-lg px-5 py-2 flex items-center justify-center gap-3"
+                  to={`/dashboard/${user.id}`}
+                >
+                  <MdDashboard size={"1.5rem"} /> Dashboard
+                </Link>
+              )}
+
               <Link
                 className="border rounded-lg px-5 py-2 flex items-center justify-center gap-3"
                 to={"/patient/personal-information/add"}
