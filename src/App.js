@@ -44,7 +44,7 @@ function App() {
         { path: "/login", element: <Login /> },
         { path: "/reset", element: <ResetPassword /> },
         { path: "/forgotpassword", element: <ForgetPassword /> },
-        { path: "/dashboard", element: <Dashboard /> },
+        { path: "/dashboard/:id", element: <Dashboard /> },
         {
           path: "/patient",
           element: <PatientLayout />,
