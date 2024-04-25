@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import leftArrow from "../../assets/images/left-arrow.svg";
 import sample from "../../assets/businessman-character-avatar-isolated_24877-60111.jpg";
+import InputElement from "./InputElement";
+import inputTextArr from "./inputTextArr";
 export default function AddDoctor() {
     return (
         <div id="add_doctor_cont">
@@ -22,7 +24,8 @@ export default function AddDoctor() {
                             w-6
                             sm:w-6
                             md:w-10
-                            hover:animate-pulse
+                            transition-all
+                            hover:opacity-70
                             "
                         />
                     </Link>
@@ -57,9 +60,38 @@ export default function AddDoctor() {
                     />
                 </div>
             </header>
-            <main>
-                
-            </main>
+            <div className="flex flex-wrap flex-col lg:m-20">
+                <div id="form-cont" className="flex flex-wrap">
+                    {inputTextArr.map((e) => (
+                        <InputElement
+                            id={e.id}
+                            labelText={e.labelText}
+                            placeholder={e.placeholder}
+                            type={e.type}
+                        />
+                    ))}
+                </div>
+                <div
+                    id="btn-cont"
+                    className="flex align-middle justify-center mt-36"
+                >
+                    <button
+                        className="
+                    bg-fuchsia-800
+                    px-14
+                    py-2
+                    rounded-lg
+                    text-white
+                    text-sm
+                    font-medium
+                    lg:px-20
+                    lg:py-4
+                    "
+                    >
+                        Add
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }
