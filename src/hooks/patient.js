@@ -3,9 +3,14 @@ import fetching from "../fetchingRequest";
 
 // get patient by code
 export const useGetPatient = ({ code, onSuccess, onError }) => {
-  const fetchPatientByCode = () => fetching().get(`/patients/search/${code}`);
+  const fetchPatient = () => {
+    if (code.length === 14)
+      return fetching().get(`/patients/get-patient/${code}`);
 
-  return useQuery("get patient", fetchPatientByCode, { onSuccess, onError });
+    return fetching().get(`/patients/search/${code}`);
+  };
+
+  return useQuery("get patient", fetchPatient, { onSuccess, onError });
 };
 
 // add patient
