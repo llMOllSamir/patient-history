@@ -11,6 +11,7 @@ import {
   fixPatientCode,
   setPatientData,
 } from "../../store/slices/patientSlice";
+import NoDataFound from "../NoDataFound/NoDataFound";
 
 export default function PersonalInformation() {
   const { id } = useParams();
@@ -58,7 +59,12 @@ export default function PersonalInformation() {
     );
   }
 
-  if (data)
+
+  if (data && Object.keys(data).length === 0) {
+    return <NoDataFound link="personal-information" title="personal information" />
+  }
+
+  if (data && Object.keys(data).length > 0)
     return (
       <React.Fragment>
         <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">

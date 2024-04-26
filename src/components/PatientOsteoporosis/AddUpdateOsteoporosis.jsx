@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ImSpinner6 } from "react-icons/im";
 
 import {
@@ -16,13 +16,11 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
 
 
   const validationSchema = yup.object({
-    age: yup.string("Must be number!").required("insert Age"),
-    weight: yup.string("Must be number!").required("insert Weight"),
+    weight: yup.number("Must be number!").required("insert Weight"),
     current_oestrogen_use: yup.string().required("What Is The Current Oestrogen "),
-    recommendations: yup.string().optional(),
   });
 
-  const { osteoporosis, loading, error } = useSelector(
+  const { osteoporosis, loading } = useSelector(
     (state) => state.osteoporosis
   );
 
@@ -30,22 +28,22 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
 
   const formik = useFormik({
     initialValues: {
-      age: osteoporosis?.age || "",
       weight: osteoporosis?.weight || "",
       current_oestrogen_use: osteoporosis?.current_oestrogen_use ? "yes" : "no",
-      recommendations: osteoporosis?.recommendations || ""
     },
     validationSchema,
     onSubmit: (values) => {
-      values.current_oestrogen_use =
-        values.current_oestrogen_use.toLowerCase() === "yes"
-          ? true
-          : false;
+      if (typeof values.current_oestrogen_use !== "boolean") {
+        values.current_oestrogen_use =
+          values.current_oestrogen_use.toLowerCase() === "yes"
+            ? true
+            : false;
+      }
       if (state === "update") {
         dispatech(
           updateOsteoporosis({
-            id: Number(patient.id),
-            data: { patient_id: patient.id, ...values },
+            id: patient.id,
+            data: { patient_id: patient.id, ...values, age: osteoporosis?.age || patient.age },
           })
         ).then((response) => {
           if (response.payload.examination) {
@@ -74,29 +72,23 @@ export default function AddUpdateOsteoporosisHistory({ state = "update" }) {
 
   return (
     <form onSubmit={formik.handleSubmit} className="select-none">
-      <div className="mx-4 lg:mx-16  grid  grid-cols-1 lg:grid-cols-2  gap-5 ">
+      <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
 
-        <div className="flex flex-col gap-5">
+        <label htmlFor="weight" className="flex capitalize flex-col gap-2 text-base font-medium ">
+          Weight
+          <input
+            id="weight"
+            type="number"
+            placeholder="Insert Weight"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.weight}
+            name="weight"
+            className="outline-none focus:border-black   px-5 py-2 rounded-lg  2xl:w-1/2 w-full   border-2  border-gray-400 text-black" />
+          {formik.touched.weight && formik.errors.weight && <p className="text-red-600 text-sm font-semibold">{formik.errors.weight}</p>}
+        </label>
 
-          <SelectedInput placeholder={"Choose age"} formik={formik} label={"age"} name="age" opt={["<= 25", "26-39", "50-70", ">70"]} />
-
-          <SelectedInput placeholder={"Choose Weight"} formik={formik} label={"Weight"} name="weight" opt={["< 60 kg", "60-69 kg", ">= 70 kg"]} />
-
-          <SelectedInput formik={formik} label={"current oestrogen use"} name="current_oestrogen_use" opt={["yes", "no"]} />
-
-        </div>
-
-        <div className="flex flex-col gap-2 font-medium">
-          <label htmlFor="recommendations" className="text-base" >Recommendations</label>
-          <textarea
-            rows={6}
-            name="recommendations"
-            id="recommendations"
-            className="border-2 rounded-lg 2xl:w-1/2 w-full outline-none resize-none  caret-gray-400 p-5"
-            placeholder="Write your recommendations" />
-          {formik.touched.recommendations && formik.errors.recommendations && <p className="text-red-600 text-sm font-semibold">{formik.errors.recommendations}</p>}
-        </div>
-
+        <SelectedInput formik={formik} label={"current oestrogen use"} name="current_oestrogen_use" opt={["yes", "no"]} />
       </div>
 
 
@@ -133,7 +125,7 @@ const SelectedInput = ({ formik, label, opt = [], name = "", placeholder }) => {
       id={name}
       onChange={formik.handleChange}
       onBlur={formik.handleBlur}
-      className={` outline-none   px-5 py-2   border-2  border-gray-400 text-black ${formik.values[name] === "" ? "text-gray-300" : "text-black"}  rounded-lg  2xl:w-1/2 w-full `}
+      className={` outline-none   px-5 py-2   border-2  border-gray-400 text-black   rounded-lg  2xl:w-1/2 w-full `}
     >
 
       {placeholder && <option

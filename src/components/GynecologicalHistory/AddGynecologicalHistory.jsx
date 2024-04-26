@@ -11,7 +11,7 @@ export default function AddGynecologicalHistory() {
   const navigate = useNavigate()
   const { data: patient } = useSelector(state => state.patient)
   const onSuccess = () => { navigate(`/patient/gynecological-history/${patient?.id}`) }
-  const { isLoading, mutate } = useAddGynecologicalHistory({ id: patient?.id, onSuccess })
+  const { isLoading, mutate, isError, error } = useAddGynecologicalHistory({ id: patient?.id, onSuccess })
 
   const validationSchema = yup.object({
     patient_id: yup.number(),
@@ -19,10 +19,19 @@ export default function AddGynecologicalHistory() {
     menstrual_cycle_abnormalities: yup.string().required(),
     contact_bleeding: yup.string().required(),
     menopause: yup.string().required(),
-    menopause_age: yup.number().optional(),
+    menopause_age: yup.number().when('menopause', {
+      is: (value) => value === "true",
+      then: (schema) => schema.required("Insert Age"),
+    }),
     using_of_contraception: yup.string().required(),
-    contraception_method: yup.string().optional(),
-    other_contraception_method: yup.string().optional(),
+    contraception_method: yup.string().when('using_of_contraception', {
+      is: (value) => value === "yes",
+      then: (schema) => schema.required("Choose Method"),
+    }),
+    other_contraception_method: yup.string().when('contraception_method', {
+      is: (value) => value === "Other",
+      then: (schema) => schema.required("Insert Method"),
+    }),
   })
 
 
@@ -43,13 +52,17 @@ export default function AddGynecologicalHistory() {
     onSubmit: (values) => {
       const data = {
         ...values,
-        contact_bleeding: values.contact_bleeding === "true" ? true : false,
-        menopause: values.menopause === "true" ? true : false,
-        using_of_contraception: values.using_of_contraception === "true" ? true : false,
+        contact_bleeding: values.contact_bleeding === "yes" ? true : false,
+        menopause: values.menopause === "yes" ? true : false,
+        using_of_contraception: values.using_of_contraception === "yes" ? true : false,
       }
       mutate(data);
     }
   })
+
+  if (isError) {
+    console.log(error);
+  }
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -147,13 +160,13 @@ export default function AddGynecologicalHistory() {
         }
 
 
-        <div className={`flex flex-col gap-3 ${formik.values.using_of_contraception !== "true" && "md:col-span-2 md:w-1/2"} `}>
+        <div className={`flex flex-col gap-3 ${formik.values.using_of_contraception !== "yes" && "md:col-span-2 md:w-1/2"} `}>
           <label htmlFor="">Using of contraception</label>
           <div className='flex flex-col gap-2 border border-gray-400 rounded-xl p-2 md:w-3/4 lg:w-1/2 xl:w-2/4 2xl:w-1/4 '>
             <label htmlFor="contraceptionYes" className='flex gap-2 text-sm '>
               <input
                 name='using_of_contraception'
-                value={true}
+                value={"yes"}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 type="radio" className='checkedInput' id="contraceptionYes" />
@@ -162,7 +175,7 @@ export default function AddGynecologicalHistory() {
             <label htmlFor="contraceptionNo" className='flex gap-2 text-sm '>
               <input
                 name='using_of_contraception'
-                value={false}
+                value={"no"}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 type="radio" className='checkedInput' id="contraceptionNo" />
@@ -173,23 +186,28 @@ export default function AddGynecologicalHistory() {
         </div>
 
 
-        {formik.values.using_of_contraception === "true" && <div className='flex flex-col gap-2  '>
+        {formik.values.using_of_contraception === "yes" && <div className='flex flex-col  gap-2  '>
           <label htmlFor="">If yes , mention the method</label>
-          <div className='flex gap-4 flex-col lg:flex-row'>
+          <div className='flex gap-4 flex-col '>
             <select
               name='contraception_method'
               value={formik.values.contraception_method}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              className='outline-none lg:w-1/2   px-2 py-1 rounded-lg select-none  border border-gray-400'>
-              <option value="" >Choose method</option>
+              className='outline-none lg:w-1/2  px-2 py-1 rounded-lg select-none  border border-gray-400'>
+              <option value={null}  >Choose method</option>
+              {["Pills", "IUD", "Injectable", "Other"].map((state, index) => <option key={index} value={state} >{state}</option>)}
             </select>
-            <input
-              name='other_contraception_method'
-              value={formik.values.other_contraception_method}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              placeholder='Other method' type="tel" className='outline-none lg:w-1/2   px-2 py-1 rounded-lg select-none  border border-gray-400' />
+            {
+              formik.values.contraception_method === "Other" &&
+              < input
+                name='other_contraception_method'
+                value={formik.values.other_contraception_method}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                placeholder='Other method' type="tel" className='outline-none lg:w-1/2   px-2 py-1 rounded-lg select-none  border border-gray-400' />
+            }
+
           </div>
           {formik.touched.contraception_method && formik.errors.contraception_method && <span className='text-red-600 font-medium text-sm'>{formik.errors.contraception_method}</span>}
           {formik.touched.other_contraception_method && formik.errors.other_contraception_method && <span className='text-red-600 font-medium text-sm'>{formik.errors.other_contraception_method}</span>}
