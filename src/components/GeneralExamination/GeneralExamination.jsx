@@ -6,11 +6,14 @@ import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
 import { useGeneralExamination } from "../../hooks/generalExamination";
+import NoDataFound from "../NoDataFound/NoDataFound";
 
 export default function GeneralExamination() {
   const { id } = useParams();
   const dispatech = useDispatch();
-  const onSuccess = (data) => { dispatech(setGenralExamination(data.data)) }
+  const onSuccess = (data) => {
+    dispatech(setGenralExamination(data.data))
+  }
   const onError = (error) => { }
   const { isLoading, isError, data: examination, error: errData } = useGeneralExamination({ id, onError, onSuccess })
   const { user } = useSelector(state => state.auth)
@@ -34,55 +37,63 @@ export default function GeneralExamination() {
     );
   }
 
-  return (
-    <>
-      <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-        <ArticalInfo
-          description={examination?.data.height}
-          title={"height(cm)"}
-        />
 
-        <ArticalInfo description={examination?.data.pulse} title={"pulse"} />
 
-        <ArticalInfo
-          description={examination?.data.weight}
-          title={"wight"}
-        />
+  if (examination?.data && Object.keys(examination?.data).length === 0) {
+    return <NoDataFound link="General-examination" title="General examination" />
+  }
 
-        <ArticalInfo
-          description={examination?.data.random_blood_sugar}
-          title={"random blood sugar"}
-        />
+  if (examination?.data && Object.keys(examination?.data).length > 0) {
+    return (
+      <>
+        <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
+          <ArticalInfo
+            description={examination?.data.height}
+            title={"height(cm)"}
+          />
 
-        <ArticalInfo
-          description={examination?.data.blood_pressure}
-          title={"blood pressure"}
-        />
-      </div>
-      <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
-        {user && user.role === "doctor" &&
-          <Link
-            to={`/patient/General-examination/update`}
-            className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
+          <ArticalInfo description={examination?.data.pulse} title={"pulse"} />
+
+          <ArticalInfo
+            description={examination?.data.weight}
+            title={"wight"}
+          />
+
+          <ArticalInfo
+            description={examination?.data.random_blood_sugar}
+            title={"random blood sugar"}
+          />
+
+          <ArticalInfo
+            description={examination?.data.blood_pressure}
+            title={"blood pressure"}
+          />
+        </div>
+        <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
+          {user && user.role === "doctor" &&
+            <Link
+              to={`/patient/General-examination/update`}
+              className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
+            >
+              <MdEdit />
+              Edit
+            </Link>
+
+          }
+
+          <button
+            className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
+            onClick={() => {
+              window.print();
+            }}
           >
-            <MdEdit />
-            Edit
-          </Link>
-
-        }
-
-        <button
-          className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
-          onClick={() => {
-            window.print();
-          }}
-        >
-          <FiDownload />
-          Download a copy
-        </button>
-      </div>
-    </>
-  );
+            <FiDownload />
+            Download a copy
+          </button>
+        </div>
+      </>
+    );
+  }
 }
 
 const ArticalInfo = ({ title, description, col, phone = null }) => {
