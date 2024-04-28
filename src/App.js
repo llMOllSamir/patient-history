@@ -33,6 +33,8 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import DoctorHistory from "./components/History/DoctorHistory";
+import PatientUterineCancer from "./components/PatientUterineCancer/PatientUterineCancer";
+import AddUpdateUterineCancer from "./components/PatientUterineCancer/AddUpdateUterineCancer";
 
 function App() {
   const routes = createBrowserRouter([
@@ -224,7 +226,14 @@ function App() {
             {
               path: "uterine",
               element: <RouteOutlet title="Uterine Cancer" route="uterine" />,
-              children: [{ path: "add" }, { path: "update" }, { path: ":id" }],
+              children: [
+                {
+                  path: "add",
+                  element: <AddUpdateUterineCancer state="add" />,
+                },
+                { path: "update", element: <AddUpdateUterineCancer /> },
+                { path: ":id", element: <PatientUterineCancer /> },
+              ],
             },
             {
               path: "Osteoporosis",
