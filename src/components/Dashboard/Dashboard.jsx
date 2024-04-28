@@ -98,7 +98,7 @@ function Dashboard() {
                             <span className="text-xl font-semibold text-blue-600">
                                 Doctors List
                             </span>
-                            <Link className="flex gap-2 items-center justify-center self-end px-3 py-1 text-xl font-medium text-center bg-fuchsia-700 rounded-lg hover:bg-fuchsia-800 text-white">
+                            <Link to='/add' className="flex gap-2 items-center justify-center self-end px-3 py-1 text-xl font-medium text-center bg-fuchsia-700 rounded-lg hover:bg-fuchsia-800 text-white">
                                 <MdAdd size={"1.5rem"} />
                                 Add Doctor
                             </Link>
@@ -147,8 +147,8 @@ function DoctorItem({ doctor }) {
                 </button>
             </div>
             {/* {showModal && (
-        <DeleteConfirmModal doctor={doctor} toggleModal={toggleModal} />
-      )} */}
+                <DeleteConfirmModal doctor={doctor} toggleModal={toggleModal} />
+            )} */}
         </div>
     );
 }

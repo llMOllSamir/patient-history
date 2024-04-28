@@ -1,6 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const initialState = { data: [], history: [] };
+const initialState = { data: [], history: [], newDoctor: {} };
+
+export const addDoctor = createAsyncThunk('doctor/add',(values, _thunkAPI)=>{
+  console.log(values)
+  return values
+})
 
 const doctorSlice = createSlice({
   name: "doctor",
@@ -23,6 +28,11 @@ const doctorSlice = createSlice({
       state.history.unshift(payload);
     },
   },
+  extraReducers: (builder)=>{
+    builder.addCase(addDoctor.fulfilled,(state,action)=>{
+      console.log(action)
+    })
+  }
 });
 
 export const {
