@@ -89,8 +89,142 @@ export const GeneralExamination = ({ generalExamination }) => {
   );
 };
 
-export const Gynecological = ({ gynecological }) => {
-  return <></>;
+export const Gynecological = ({ gynaecological }) => {
+  return (
+    <section className="lg:ms-20 ms-4 grid grid-cols-1 md:grid-cols-2 gap-8 select-none">
+      <article className="flex flex-col gap-2 col-span-2">
+        <h2 className="font-medium text-2xl">Date of last period</h2>
+        <p className="text-xl font-semibold text-gray-500">
+          {gynaecological?.date_of_last_period || ""}
+        </p>
+      </article>
+
+      <article className="flex flex-col gap-2">
+        <h2 className="font-medium text-2xl">Menstrual cycle abnormalities</h2>
+        <p className="text-xl font-semibold text-gray-500">
+          {gynaecological?.menstrual_cycle_abnormalities || ""}
+        </p>
+      </article>
+
+      <article className="flex flex-col gap-2">
+        <h2 className="font-medium text-2xl">Contact bleeding</h2>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="ContactYes">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.contact_bleeding === 1}
+              name="Contact"
+              value={"yes"}
+              readOnly
+              id="ContactYes"
+            />{" "}
+            Yes
+          </label>
+          <label htmlFor="ContactcNo">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.contact_bleeding === 0}
+              name="Contact"
+              value={"no"}
+              readOnly
+              id="ContactcNo"
+            />{" "}
+            No
+          </label>
+        </div>
+      </article>
+
+      <article
+        className={`flex flex-col gap-2 ${
+          gynaecological?.menopause === 0 && "col-span-2"
+        }`}
+      >
+        <h2 className="font-medium text-2xl">Menopause</h2>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="MenopauseYes">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.menopause === 1}
+              name="Menopause"
+              value={"yes"}
+              readOnly
+              id="MenopauseYes"
+            />{" "}
+            Yes
+          </label>
+          <label htmlFor="MenopauseNo">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.menopause === 0}
+              name="Menopause"
+              value={"no"}
+              readOnly
+              id="MenopauseNo"
+            />{" "}
+            No
+          </label>
+        </div>
+      </article>
+
+      {gynaecological?.menopause === 1 && (
+        <article className="flex flex-col gap-2">
+          <h2 className="font-medium text-2xl">If yes , mention Age</h2>
+          <p className="text-xl font-semibold text-gray-500">
+            {gynaecological?.menopause_age}
+          </p>
+        </article>
+      )}
+
+      <article
+        className={`flex flex-col gap-2 ${
+          gynaecological?.using_of_contraception === 0 && "col-span-2"
+        }`}
+      >
+        <h2 className="font-medium text-2xl">Using of contraception</h2>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="contraceptionYes">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.using_of_contraception === 1}
+              name="contraception"
+              value={"yes"}
+              readOnly
+              id="contraceptionYes"
+            />{" "}
+            Yes
+          </label>
+          <label htmlFor="contraceptionNo">
+            <input
+              type="radio"
+              className="checkedInput"
+              checked={gynaecological?.using_of_contraception === 0}
+              name="contraception"
+              value={"no"}
+              readOnly
+              id="contraceptionNo"
+            />{" "}
+            No
+          </label>
+        </div>
+      </article>
+
+      {gynaecological?.using_of_contraception === 1 && (
+        <article className="flex flex-col gap-2">
+          <h2 className="font-medium text-2xl">If yes , mention the method</h2>
+          <p className="text-xl font-semibold text-gray-500">
+            {gynaecological?.contraception_method ||
+              gynaecological?.other_contraception_method ||
+              ""}
+          </p>
+        </article>
+      )}
+    </section>
+  );
 };
 
 export const Cervix = ({ cervix }) => {
@@ -112,7 +246,9 @@ export const Uterine = ({ uterine }) => {
                     className={`${styles.shadow}`}
                     id="LynchSyndromePiv"
                     type="radio"
-                    checked={uterine.lynch_syndrome === "+ve"}
+
+                    checked={uterine?.lynch_syndrome === "+ve"}
+
                     readOnly
                   />
                   +ve
@@ -123,7 +259,9 @@ export const Uterine = ({ uterine }) => {
                     className={`${styles.shadow}`}
                     id="LynchSyndromeNiv"
                     type="radio"
-                    checked={uterine.lynch_syndrome === "-ve"}
+
+                    checked={uterine?.lynch_syndrome === "-ve"}
+
                     readOnly
                   />{" "}
                   -ve
@@ -139,7 +277,9 @@ export const Uterine = ({ uterine }) => {
                     name="IrregularBleeding"
                     className={`${styles.shadow}`}
                     id="IrregularBleedingYes"
-                    checked={uterine.irregular_bleeding === 1}
+
+                    checked={uterine?.irregular_bleeding === 1}
+
                     readOnly
                     type="radio"
                     value={true}
@@ -151,7 +291,9 @@ export const Uterine = ({ uterine }) => {
                     name="IrregularBleeding"
                     className={`${styles.shadow}`}
                     id="IrregularBleedingNo"
-                    checked={uterine.irregular_bleeding === 0}
+
+                    checked={uterine?.irregular_bleeding === 0}
+
                     readOnly
                     type="radio"
                     value={false}
@@ -195,7 +337,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_perimetrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
-                        value={uterine.tvs_perimetrium_result}
+
+                        value={uterine?.tvs_perimetrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -204,7 +348,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_perimetrium_comment"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
-                        value={uterine.tvs_perimetrium_comment}
+
+                        value={uterine?.tvs_perimetrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -218,7 +364,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_myometrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
-                        value={uterine.tvs_myometrium_result}
+
+                        value={uterine?.tvs_myometrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -227,7 +375,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_myometrium_comment"
                         className="outline-none  bg-transparent px-3 w-full"
                         type="text"
-                        value={uterine.tvs_myometrium_comment}
+
+                        value={uterine?.tvs_myometrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -241,7 +391,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_endometrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
-                        value={uterine.tvs_endometrium_result}
+
+                        value={uterine?.tvs_endometrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -250,7 +402,8 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_endometrium_comment"
                         className="outline-none  bg-transparent px-3 w-full"
                         type="text"
-                        value={uterine.tvs_endometrium_comment}
+                        value={uterine?.tvs_endometrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -279,7 +432,8 @@ export const Uterine = ({ uterine }) => {
                         name="biopsy_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
-                        value={uterine.biopsy_result}
+                        value={uterine?.biopsy_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -288,7 +442,9 @@ export const Uterine = ({ uterine }) => {
                         name="biopsy_comment"
                         className="outline-none bg-transparent px-3 w-full"
                         type="text"
-                        value={uterine.biopsy_comment}
+
+                        value={uterine?.biopsy_comment || ""}
+
                         readOnly
                       />
                     </td>

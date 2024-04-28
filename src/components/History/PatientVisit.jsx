@@ -29,7 +29,7 @@ export default function Visit({ data, setIndex, type }) {
     {
       title: "Gynecological",
       value: "gynaecological",
-      element: <Gynecological gynecological={data.gynaecological} />,
+      element: <Gynecological gynaecological={data.gynaecological} />,
     },
     {
       title: "Obstetrics",
