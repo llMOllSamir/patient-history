@@ -18,6 +18,7 @@ export const updateOsteoporosis = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
+      notify("حدث خطأ أثناء تحديث الفحص", "error");
       return rejectWithValue(error.message);
     }
   }
@@ -34,7 +35,6 @@ export const addOsteoporosis = createAsyncThunk(
       }
       return response.data;
     } catch (error) {
-      console.log(error);
       notify("حدث خطأ أثناء تحديث الفحص", "error");
       return rejectWithValue(error.message);
     }
