@@ -48,9 +48,7 @@ export default function AddDoctor() {
     const validationSchema = object({
         name: string().required("Name is required"),
         password: string().required("Password is required").matches(/(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,"Password must be 8 or more character"),
-        'confirm-password': string().required("Password confirmation is required")
-            .oneOf([ref("password")], "Passwords must match")
-            ,
+        'confirm-password': string().required("Password confirmation is required").oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
         phone: string().required("Phone is required").matches(
             /(?:[0-9] ?){10}[0-9]$/,
@@ -65,6 +63,9 @@ export default function AddDoctor() {
         validationSchema,
         onSubmit: (values) => {
             dispatch(addDoctor(values));
+            // Object.keys(values).forEach((e)=>{
+            //     values[e] = ''
+            // })
         },
     });
     const dispatch = useDispatch();
@@ -127,31 +128,21 @@ export default function AddDoctor() {
             </header>
             <div className="flex flex-wrap flex-col lg:m-20">
                 <div id="form-cont" className="m-5">
-                    <Formik
-                        initialValues={formik.initialValues}
-                        validationSchema={formik.validationSchema}
-                        onSubmit={formik.onSubmit}
-                    >
-                        <>
                             <div id="input-cont" className="flex flex-wrap">
-                                {inputTextArr.map((e) => (
-                                    <div
-                                    id="input-cont"
-                                    className="flex items-center w-1/2 my-8 text-sm lg:text-lg">
-                                        <InputElement
-                                        key={e.id}
-                                        id={e.id}
-                                        name={e.name}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        labelText={e.labelText}
-                                        placeholder={e.placeholder}
-                                        type={e.type}
-                                        value={formik.values[e.id]}
-                                        error={formik.errors[e.id]}
-                                        touched={formik.touched[e.id]}
+                                {inputTextArr.map((e,i) => (
+                                    <InputElement
+                                    key={i}
+                                    id={e.id}
+                                    name={e.name}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    labelText={e.labelText}
+                                    placeholder={e.placeholder}
+                                    type={e.type}
+                                    value={formik.values[e.id]}
+                                    error={formik.errors[e.id]}
+                                    touched={formik.touched[e.id]}
                                     />
-                                    </div>
                                 ))}
                             </div>
                             <div
@@ -184,8 +175,11 @@ export default function AddDoctor() {
                                     Add
                                 </button>
                             </div>
-                        </>
-                    </Formik>
+                            {
+                                inputTextArr.map((e)=>(
+                                    formik.errors[e.name] && formik.touched[e.name] ? <p className="text-center text-red-600 text-sm mt-3">{formik.errors[e.name]}</p> : null
+                                ))
+                            }
                 </div>
             </div>
         </div>
