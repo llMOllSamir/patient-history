@@ -246,7 +246,9 @@ export const Uterine = ({ uterine }) => {
                     className={`${styles.shadow}`}
                     id="LynchSyndromePiv"
                     type="radio"
+
                     checked={uterine?.lynch_syndrome === "+ve"}
+
                     readOnly
                   />
                   +ve
@@ -257,7 +259,9 @@ export const Uterine = ({ uterine }) => {
                     className={`${styles.shadow}`}
                     id="LynchSyndromeNiv"
                     type="radio"
+
                     checked={uterine?.lynch_syndrome === "-ve"}
+
                     readOnly
                   />{" "}
                   -ve
@@ -273,7 +277,9 @@ export const Uterine = ({ uterine }) => {
                     name="IrregularBleeding"
                     className={`${styles.shadow}`}
                     id="IrregularBleedingYes"
+
                     checked={uterine?.irregular_bleeding === 1}
+
                     readOnly
                     type="radio"
                     value={true}
@@ -285,7 +291,9 @@ export const Uterine = ({ uterine }) => {
                     name="IrregularBleeding"
                     className={`${styles.shadow}`}
                     id="IrregularBleedingNo"
+
                     checked={uterine?.irregular_bleeding === 0}
+
                     readOnly
                     type="radio"
                     value={false}
@@ -329,7 +337,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_perimetrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
+
                         value={uterine?.tvs_perimetrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -338,7 +348,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_perimetrium_comment"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
+
                         value={uterine?.tvs_perimetrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -352,7 +364,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_myometrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
+
                         value={uterine?.tvs_myometrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -361,7 +375,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_myometrium_comment"
                         className="outline-none  bg-transparent px-3 w-full"
                         type="text"
+
                         value={uterine?.tvs_myometrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -375,7 +391,9 @@ export const Uterine = ({ uterine }) => {
                         name="tvs_endometrium_result"
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
+
                         value={uterine?.tvs_endometrium_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -385,6 +403,7 @@ export const Uterine = ({ uterine }) => {
                         className="outline-none  bg-transparent px-3 w-full"
                         type="text"
                         value={uterine?.tvs_endometrium_comment || ""}
+
                         readOnly
                       />
                     </td>
@@ -414,6 +433,7 @@ export const Uterine = ({ uterine }) => {
                         className="outline-none bg-transparent  px-3 w-full"
                         type="text"
                         value={uterine?.biopsy_result || ""}
+
                         readOnly
                       />
                     </td>
@@ -422,7 +442,9 @@ export const Uterine = ({ uterine }) => {
                         name="biopsy_comment"
                         className="outline-none bg-transparent px-3 w-full"
                         type="text"
+
                         value={uterine?.biopsy_comment || ""}
+
                         readOnly
                       />
                     </td>
