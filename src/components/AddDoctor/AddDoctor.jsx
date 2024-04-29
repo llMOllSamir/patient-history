@@ -30,15 +30,15 @@ export default function AddDoctor() {
             type: "email",
         },
         {
-            id: "confirm-password",
-            name: "confirm-password",
+            id: "password_confirmation",
+            name: "password_confirmation",
             labelText: "Confirm password",
             placeholder: "Confirm your password",
             type: "password",
         },
         {
-            id: "phone",
-            name: "phone",
+            id: "Phone_number",
+            name: "Phone_number",
             labelText: "Phone number",
             placeholder: "Enter your Phone number",
             type: "tel",
@@ -48,7 +48,7 @@ export default function AddDoctor() {
     const validationSchema = object({
         name: string().required("Name is required"),
         password: string().required("Password is required").matches(/(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,"Password must be 8 or more character"),
-        'confirm-password': string().required("Password confirmation is required").oneOf([ref("password")], "Passwords must match"),
+        password_confirmation: string().required("Password confirmation is required").oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
         phone: string().required("Phone is required").matches(
             /(?:[0-9] ?){10}[0-9]$/,

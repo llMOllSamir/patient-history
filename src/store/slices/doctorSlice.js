@@ -1,10 +1,21 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import fetching from "../../fetchingRequest";
 
 const initialState = { data: [], history: [], newDoctor: {} };
 
-export const addDoctor = createAsyncThunk('doctor/add',(values, _thunkAPI)=>{
-  console.log(values)
-  return values
+export const addDoctor = createAsyncThunk('doctor/add',async (values, _thunkAPI)=>{
+  try{
+    const response = await  fetching().post(
+      '/doctors',
+      values,{
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    return response
+  }catch(e){
+    console.log(e)
+  }
 })
 
 const doctorSlice = createSlice({
@@ -31,6 +42,8 @@ const doctorSlice = createSlice({
   extraReducers: (builder)=>{
     builder.addCase(addDoctor.fulfilled,(state,action)=>{
       console.log(action)
+      console.log(state)
+
     })
   }
 });
