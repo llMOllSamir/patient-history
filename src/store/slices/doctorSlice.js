@@ -42,8 +42,7 @@ const doctorSlice = createSlice({
   extraReducers: (builder)=>{
     builder.addCase(addDoctor.fulfilled,(state,action)=>{
       console.log(action)
-      console.log(state)
-
+      
     })
   }
 });

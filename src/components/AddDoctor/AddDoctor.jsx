@@ -37,8 +37,8 @@ export default function AddDoctor() {
             type: "password",
         },
         {
-            id: "Phone_number",
-            name: "Phone_number",
+            id: "phone_number",
+            name: "phone_number",
             labelText: "Phone number",
             placeholder: "Enter your Phone number",
             type: "tel",
@@ -50,11 +50,12 @@ export default function AddDoctor() {
         password: string().required("Password is required").matches(/(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,"Password must be 8 or more character"),
         password_confirmation: string().required("Password confirmation is required").oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
-        phone: string().required("Phone is required").matches(
+        phone_number: string().required("Phone is required").matches(
             /(?:[0-9] ?){10}[0-9]$/,
             "Invalid phone number"
         ),
     });
+    const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: inputTextArr.reduce((acc, e) => {
             acc[e.id] = "";
@@ -63,12 +64,8 @@ export default function AddDoctor() {
         validationSchema,
         onSubmit: (values) => {
             dispatch(addDoctor(values));
-            // Object.keys(values).forEach((e)=>{
-            //     values[e] = ''
-            // })
         },
     });
-    const dispatch = useDispatch();
 
     return (
         <div id="add_doctor_cont">

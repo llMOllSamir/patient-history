@@ -1,7 +1,6 @@
 import { useField } from "formik";
 
 export default function InputElement({ labelText, error, touched, ...props }) {
-    console.log(props.id)
     return (
         <div
         id="input-cont"
