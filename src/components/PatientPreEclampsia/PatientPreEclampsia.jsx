@@ -2,34 +2,33 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
-import { MdAdd, MdEdit } from "react-icons/md";
-import { getPreEclampsia } from "../../store/slices/preEclampsiaSlice";
+import { MdEdit } from "react-icons/md";
+import { setPreEclampsia } from "../../store/slices/preEclampsiaSlice";
 import NoDataFound from "../NoDataFound/NoDataFound";
+import { useGetPreEclampsia } from "../../hooks/preEclampsia";
 
 export default function PatientPreEclampsia() {
   const { id } = useParams();
   const dispatech = useDispatch();
-  const { preEclampsia, loading, error } = useSelector(
+  const { preEclampsia } = useSelector(
     (state) => state.preEclampsia
   );
   const { user } = useSelector((state) => state.auth);
+  const onError = (error) => { console.log(error); }
+  const onSuccess = (data) => {
+    dispatech(setPreEclampsia(data.data))
+  }
+  const { error, isError, isLoading } = useGetPreEclampsia({ id, onError, onSuccess })
 
 
-  useEffect(() => {
-    dispatech(getPreEclampsia({ id: Number(id) })).then((res) => {
-      if (res.payload.id) {
-      }
-    });
-  }, [dispatech, id]);
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingPatient />;
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
         <h2 className="font-bold text-red-500 text-3xl">{error.data.error}</h2>

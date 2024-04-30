@@ -4,27 +4,9 @@ import notify from "../../utilities/alert-toastify";
 
 const initialState = {
   loading: false,
-  preEclampsia: {
-    "history_of_pre-eclampsia": null,
-    number_of_pregnancies_with_pe: null,
-    date_of_pregnancies_with_pe: null,
-    fate_of_the_pregnancy: null,
-  },
+  preEclampsia: null,
   error: null,
 };
-
-// Get Pre Eclampsia History data
-export const getPreEclampsia = createAsyncThunk(
-  "preEclampsia/getPreEclampsia",
-  async ({ id }, { rejectWithValue }) => {
-    try {
-      const response = await Http().get(`/pre-eclampsia/${id}`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(JSON.stringify(error.response));
-    }
-  }
-);
 
 export const updatePreEclampsia = createAsyncThunk(
   "preEclampsia/updatePreEclampsia",
@@ -68,8 +50,8 @@ const preEclampsiaSlice = createSlice({
   name: "preEclampsia",
   initialState,
   reducers: {
-    clearPreEclampsiaData: (state) => {
-      Object.assign(state, initialState);
+    setPreEclampsia: (state, { payload }) => {
+      state.preEclampsia = payload || null;
     },
   },
   extraReducers: (builder) => {
@@ -86,25 +68,8 @@ const preEclampsiaSlice = createSlice({
       state.loading = false;
       state.error = true;
     });
-    builder.addCase(getPreEclampsia.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
-    builder.addCase(getPreEclampsia.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.error = null;
-      payload.date_of_pregnancies_with_pe = payload.date_of_pregnancies_with_pe
-        ? JSON.parse(payload.date_of_pregnancies_with_pe)
-        : null;
-      state.preEclampsia = payload;
-    });
-    builder.addCase(getPreEclampsia.rejected, (state, { payload }) => {
-      payload = JSON.parse(payload);
-      state.loading = false;
-      state.error = payload;
-    });
   },
 });
 
-export const { clearPreEclampsiaData } = preEclampsiaSlice.actions;
+export const { setPreEclampsia } = preEclampsiaSlice.actions;
 export default preEclampsiaSlice.reducer;

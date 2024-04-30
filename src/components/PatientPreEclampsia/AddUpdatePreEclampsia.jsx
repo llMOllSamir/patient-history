@@ -9,8 +9,6 @@ import { useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import {
   addPreEclampsia,
-  clearPreEclampsiaData,
-  getPreEclampsia,
   updatePreEclampsia,
 } from "../../store/slices/preEclampsiaSlice";
 
@@ -80,13 +78,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
     },
   });
 
-  useEffect(() => {
-    if (state === "update") {
-      dispatech(getPreEclampsia({ id: Number(id) }));
-    } else {
-      dispatech(clearPreEclampsiaData());
-    }
-  }, [dispatech, id]);
+
 
   useEffect(() => {
     // Set initial values for formik after Pre-eclampsia data is fetched
@@ -247,9 +239,8 @@ const InputInfo = ({ title, name, form, type = "text", col, index }) => {
   };
   return (
     <div
-      className={`flex flex-col font-medium gap-1  capitalize ${
-        col && `md:col-span-${col}`
-      }`}
+      className={`flex flex-col font-medium gap-1  capitalize ${col && `md:col-span-${col}`
+        }`}
     >
       <label htmlFor={name} className="text-base ">
         {title}
@@ -269,9 +260,8 @@ const InputInfo = ({ title, name, form, type = "text", col, index }) => {
         value={type === "date" ? form.values[name][index] : form.values[name]}
         onBlur={form.handleBlur}
         onChange={handleChange}
-        className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg ${
-          col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "
-        } w-full `}
+        className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg ${col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "
+          } w-full `}
         placeholder={`Insert ${title}`}
       />
     </div>
