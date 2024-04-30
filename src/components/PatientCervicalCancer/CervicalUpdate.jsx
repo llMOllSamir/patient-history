@@ -44,7 +44,7 @@ export default function CervicalUpdate() {
         ,
         onSubmit: (values) => {
             values.hpv_vaccine = values.hpv_vaccine === "yes" ? true : false
-            mutate({ data: values, id: patient?.id });
+            mutate({ data: values, id: cervical?.id });
         }
     })
     return (
