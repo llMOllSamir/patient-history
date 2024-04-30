@@ -11,6 +11,7 @@ import breastReducer from "./slices/breastSlice";
 import ovarianReducer from "./slices/ovarianSlice";
 import historyReducer from "./slices/history";
 import uterineReducer from "./slices/uterineSlice";
+import cervicalReucer from "./slices/cervicalSlice";
 
 const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ const store = configureStore({
     ovarian: ovarianReducer,
     history: historyReducer,
     uterine: uterineReducer,
+    cervical: cervicalReucer,
   },
 });
 

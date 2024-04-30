@@ -35,6 +35,9 @@ import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import DoctorHistory from "./components/History/DoctorHistory";
 import PatientUterineCancer from "./components/PatientUterineCancer/PatientUterineCancer";
 import AddUpdateUterineCancer from "./components/PatientUterineCancer/AddUpdateUterineCancer";
+import PatientCervicalCancer from "./components/PatientCervicalCancer/PatientCervicalCancer";
+import CervicalUpdate from "./components/PatientCervicalCancer/CervicalUpdate";
+import CervicalAdd from "./components/PatientCervicalCancer/CervicalAdd";
 
 function App() {
   const routes = createBrowserRouter([
@@ -175,7 +178,25 @@ function App() {
             {
               path: "cervical",
               element: <RouteOutlet title="Cervix Cancer" route="cervical" />,
-              children: [{ path: "add" }, { path: "update" }, { path: ":id" }],
+              children: [
+                {
+                  path: "add",
+                  element: (
+                    <ProtectedRoute>
+                      <CervicalAdd />
+                    </ProtectedRoute>
+                  ),
+                },
+                {
+                  path: "update",
+                  element: (
+                    <ProtectedRoute>
+                      <CervicalUpdate />
+                    </ProtectedRoute>
+                  ),
+                },
+                { path: ":id", element: <PatientCervicalCancer /> },
+              ],
             },
             {
               path: "breast",
