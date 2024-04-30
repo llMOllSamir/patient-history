@@ -16,7 +16,7 @@ export function PatientVisit({
           {type === "doctor" ? `DR.${doctor_name}` : `${patient_name}`}
         </div>
         <button
-          className="justify-center self-start px-5 py-1.5 text-base font-medium leading-5 text-center text-white bg-blue-600 rounded-md border-2 border-blue-600 border-solid max-md:px-5"
+          className="justify-center self-start px-5 py-1.5 text-base font-medium leading-5 text-center text-white bg-blue-600 hover:bg-blue-700 rounded-md border-2 border-blue-600 border-solid max-md:px-5"
           onClick={() => setIndex(index)}
         >
           View Data
