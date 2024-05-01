@@ -1,11 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import leftArrow from "../../assets/images/left-arrow.svg";
 import sample from "../../assets/businessman-character-avatar-isolated_24877-60111.jpg";
 import InputElement from "./InputElement";
-import { useDispatch } from "react-redux";
-import { addDoctor } from "../../store/slices/doctorSlice";
-import { Formik, useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    addDoctor,
+    getDoctor,
+    updateDoctor,
+} from "../../store/slices/doctorSlice";
+import { useFormik } from "formik";
 import { object, ref, string } from "yup";
+import { useEffect, useState } from "react";
 export default function AddDoctor() {
     const inputTextArr = [
         {
@@ -44,29 +49,69 @@ export default function AddDoctor() {
             type: "tel",
         },
     ];
+    const [initialValues, setInitialValues] = useState({})
+    useEffect(()=>{
+        const constructInitialValues = inputTextArr.reduce((acc, e) => {
+            acc[e.id] = "";
+            return acc;
+        }, {})
+        setInitialValues(constructInitialValues)
+    },[])
+    const { user } = useSelector((state) => state.auth);
+    const { id } = useParams();
+    const getDoctorRes = useSelector((e) => e.doctor.getDoctor);
 
     const validationSchema = object({
         name: string().required("Name is required"),
-        password: string().required("Password is required").matches(/(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,"Password must be 8 or more character"),
-        password_confirmation: string().required("Password confirmation is required").oneOf([ref("password")], "Passwords must match"),
+        password: id
+        ? string().matches(
+              /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
+              "Password must be 8 or more characters"
+          )
+        : string()
+              .required("Password is required")
+              .matches(
+                  /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
+                  "Password must be 8 or more characters"
+              ),
+        password_confirmation: id
+        ? string().oneOf([ref("password")], "Passwords must match")
+        : string()
+              .required("Password confirmation is required")
+              .oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
-        phone_number: string().required("Phone is required").matches(
-            /(?:[0-9] ?){10}[0-9]$/,
-            "Invalid phone number"
-        ),
+        phone_number: string()
+            .required("Phone is required")
+            .matches(/(?:[0-9] ?){10}[0-9]$/, "Invalid phone number"),
     });
     const dispatch = useDispatch();
     const formik = useFormik({
-        initialValues: inputTextArr.reduce((acc, e) => {
-            acc[e.id] = "";
-            return acc;
-        }, {}),
+        initialValues: initialValues,
         validationSchema,
+        validateOnChange: true,
+        validateOnBlur: true,
         onSubmit: (values) => {
-            dispatch(addDoctor(values));
+            console.log(values)
+            id
+                ? dispatch(updateDoctor({ id, values }))
+                : dispatch(addDoctor(values));
         },
     });
-
+    useEffect(() => {
+        console.log(getDoctorRes.data);
+        const newInitialValues = inputTextArr.reduce((acc, e) => {
+            acc[e.id] = getDoctorRes.data ? getDoctorRes.data[e.id] : "";
+            return acc;
+        }, {})
+        formik.setValues(newInitialValues);
+    }, [getDoctorRes]);
+    useEffect(() => {
+        if (id) {
+            dispatch(getDoctor(id));
+        }else{
+            formik.setValues(initialValues)
+        }
+    }, []);
     return (
         <div id="add_doctor_cont">
             <header className="bg-fuchsia-800 h-16 flex justify-between">
@@ -79,7 +124,7 @@ export default function AddDoctor() {
                     justify-around
                     "
                 >
-                    <Link to="/dashboard">
+                    <Link to={`/dashboard/${user.id}`}>
                         <img
                             src={leftArrow}
                             alt=""
@@ -125,34 +170,42 @@ export default function AddDoctor() {
             </header>
             <div className="flex flex-wrap flex-col lg:m-20">
                 <div id="form-cont" className="m-5">
-                            <div id="input-cont" className="flex flex-wrap">
-                                {inputTextArr.map((e,i) => (
-                                    <InputElement
-                                    key={i}
-                                    id={e.id}
-                                    name={e.name}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    labelText={e.labelText}
-                                    placeholder={e.placeholder}
-                                    type={e.type}
-                                    value={formik.values[e.id]}
-                                    error={formik.errors[e.id]}
-                                    touched={formik.touched[e.id]}
-                                    />
-                                ))}
-                            </div>
-                            <div
-                                id="btn-cont"
-                                className="flex align-middle justify-center mt-36 "
-                            >
-                                <button
-                                    type="submit"
-                                    onClick={formik.handleSubmit}
-                                    className="
-                                        bg-fuchsia-800
-                                        lg:hover:bg-fuchsia-600
-                                        lg:active:bg-fuchsia-800
+                    <div id="input-cont" className="flex flex-wrap">
+                        {inputTextArr.map((e, i) => (
+                            <InputElement
+                                key={i}
+                                id={e.id}
+                                name={e.name}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                labelText={e.labelText}
+                                placeholder={e.placeholder}
+                                type={e.type}
+                                value={formik.values[e.id]}
+                                error={formik.errors[e.id]}
+                                touched={formik.touched[e.id]}
+                            />
+                        ))}
+                    </div>
+                    <div
+                        id="btn-cont"
+                        className="flex align-middle justify-center mt-36 "
+                    >
+                        <button
+                        disabled= {!formik.isValid || formik.dirty}
+                            type="submit"
+                            onClick={formik.handleSubmit}
+                            className={`
+                                        ${
+                                            formik.dirty ? 
+                                            `bg-fuchsia-800
+                                            lg:hover:bg-fuchsia-600
+                                            lg:active:bg-fuchsia-800
+                                            md:active:scale-95
+                                            md:active:shadow-none`
+                                            : 
+                                            `bg-slate-500`
+                                        }
                                         px-14
                                         py-2
                                         rounded-lg
@@ -164,19 +217,22 @@ export default function AddDoctor() {
                                         lg:px-20
                                         lg:py-4
                                         shadow-2xl
-                                        md:active:scale-95
-                                        md:active:shadow-none
                                         transition-all
-                                    "
-                                >
-                                    Add
-                                </button>
-                            </div>
-                            {
-                                inputTextArr.map((e)=>(
-                                    formik.errors[e.name] && formik.touched[e.name] ? <p className="text-center text-red-600 text-sm mt-3">{formik.errors[e.name]}</p> : null
-                                ))
-                            }
+                                    `}
+                        >
+                            {id ? "Update" : "Add"}
+                        </button>
+                    </div>
+                    {inputTextArr.map((e, i) =>
+                        formik.errors[e.name] && formik.touched[e.name] ? (
+                            <p
+                                key={i}
+                                className="text-center text-red-600 text-sm mt-3"
+                            >
+                                {formik.errors[e.name]}
+                            </p>
+                        ) : null
+                    )}
                 </div>
             </div>
         </div>

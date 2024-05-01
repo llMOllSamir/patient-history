@@ -23,7 +23,7 @@ function Dashboard() {
     const { id } = useParams();
     const { data, history } = useSelector((state) => state.doctor);
     const { user } = useSelector((state) => state.auth);
-
+    console.log(user)
     const doctorsOnSuccess = (data) => {
         dispatch(setDoctorsData(data.data));
     };
@@ -98,7 +98,10 @@ function Dashboard() {
                             <span className="text-xl font-semibold text-blue-600">
                                 Doctors List
                             </span>
-                            <Link to='/add' className="flex gap-2 items-center justify-center self-end px-3 py-1 text-xl font-medium text-center bg-fuchsia-700 rounded-lg hover:bg-fuchsia-800 text-white">
+                            <Link
+                                to="/doctor/add"
+                                className="flex gap-2 items-center justify-center self-end px-3 py-1 text-xl font-medium text-center bg-fuchsia-700 rounded-lg hover:bg-fuchsia-800 text-white"
+                            >
                                 <MdAdd size={"1.5rem"} />
                                 Add Doctor
                             </Link>
@@ -134,7 +137,10 @@ function DoctorItem({ doctor }) {
                 >
                     <MdHistory size={"1.5rem"} /> View history
                 </Link>
-                <Link className="flex gap-1 self-start px-2.5 py-1 text-center text-gray-200 whitespace-nowrap bg-blue-900 rounded-lg hover:bg-blue-950">
+                <Link
+                    to={`/doctor/add/${doctor.id}`}
+                    className="flex gap-1 self-start px-2.5 py-1 text-center text-gray-200 whitespace-nowrap bg-blue-900 rounded-lg hover:bg-blue-950"
+                >
                     <MdEdit size={"1.2rem"} />
                     Edit
                 </Link>

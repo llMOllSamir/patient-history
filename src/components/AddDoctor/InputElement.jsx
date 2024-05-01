@@ -16,9 +16,6 @@ export default function InputElement({ labelText, error, touched, ...props }) {
                 {...props}
                 className={`border focus:outline-none ${error && touched ? 'border-red-500' : 'border-gray-300'} rounded-md p-1 focus:shadow-lg transition-shadow`}
             />
-            {/* {
-                error && touched ? <p className="text-red-600 text-sm mt-3">{error}</p> : null
-            } */}
             </div>
         </div>
     );
