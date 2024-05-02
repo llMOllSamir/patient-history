@@ -4,22 +4,24 @@ import fetching from "../../fetchingRequest";
 const initialState = {
     data: [],
     history: [],
-    newDoctor: {},
-    getDoctor: {},
-    updateDoctor: {},
+    newDoctorState: {},
+    getDoctorState: {},
+    updateDoctorState: {},
 };
 
 export const addDoctor = createAsyncThunk(
     "doctor/add",
     async (values, _thunkAPI) => {
         try {
-            return JSON.stringify(await fetching().post("/doctors", values, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }));
+            return JSON.stringify(
+                await fetching().post("/doctors", values, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+            );
         } catch (e) {
-            return _thunkAPI.rejectWithValue(e);
+            return _thunkAPI.rejectWithValue(JSON.stringify(e));
         }
     }
 );
@@ -30,7 +32,7 @@ export const getDoctor = createAsyncThunk(
         try {
             return JSON.stringify(await fetching().get(`/doctors/${id}`));
         } catch (e) {
-            return _thunkAPI.rejectWithValue(e);
+            return _thunkAPI.rejectWithValue(JSON.stringify(e));
         }
     }
 );
@@ -42,7 +44,7 @@ export const updateDoctor = createAsyncThunk(
                 await fetching().put(`/doctors/${id}`, values)
             );
         } catch (e) {
-            return _thunkAPI.rejectWithValue(e);
+            return _thunkAPI.rejectWithValue(JSON.stringify(e));
         }
     }
 );
@@ -67,17 +69,25 @@ const doctorSlice = createSlice({
         addAdminActivity: (state, { payload }) => {
             state.history.unshift(payload);
         },
+        resetGetDoctor: (state) => {
+            state.getDoctorState = "";
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(addDoctor.fulfilled, (state, action) => {
-            state.newDoctor = JSON.parse(action.payload);
+            console.log(action.payload);
+            state.newDoctorState = JSON.parse(action.payload);
+        });
+        builder.addCase(addDoctor.rejected, (state, action) => {
+            console.log(action.payload);
+            state.newDoctorState = JSON.parse(action.payload);
         });
         builder.addCase(getDoctor.fulfilled, (state, action) => {
-            state.getDoctor = JSON.parse(action.payload);
+            state.getDoctorState = JSON.parse(action.payload);
         });
         builder.addCase(updateDoctor.fulfilled, (state, action) => {
-            console.log(JSON.parse(action.payload))
-            state.updateDoctor = JSON.parse(action.payload);
+            console.log(JSON.parse(action.payload));
+            state.updateDoctorState = JSON.parse(action.payload);
         });
     },
 });
@@ -88,5 +98,6 @@ export const {
     setHistory,
     deleteDoctor,
     addAdminActivity,
+    resetGetDoctor,
 } = doctorSlice.actions;
 export default doctorSlice.reducer;

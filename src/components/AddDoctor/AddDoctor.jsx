@@ -6,11 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     addDoctor,
     getDoctor,
+    resetGetDoctor,
     updateDoctor,
 } from "../../store/slices/doctorSlice";
 import { useFormik } from "formik";
 import { object, ref, string } from "yup";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import notify from "../../utilities/alert-toastify";
 export default function AddDoctor() {
     const inputTextArr = [
         {
@@ -49,36 +51,34 @@ export default function AddDoctor() {
             type: "tel",
         },
     ];
-    const [initialValues, setInitialValues] = useState({})
-    useEffect(()=>{
-        const constructInitialValues = inputTextArr.reduce((acc, e) => {
-            acc[e.id] = "";
-            return acc;
-        }, {})
-        setInitialValues(constructInitialValues)
-    },[])
+    const initialValues = inputTextArr.reduce((acc, e) => {
+        acc[e.id] = "";
+        return acc;
+    }, {});
     const { user } = useSelector((state) => state.auth);
     const { id } = useParams();
-    const getDoctorRes = useSelector((e) => e.doctor.getDoctor);
+    const { getDoctorState, updateDoctorState, newDoctorState } = useSelector(
+        (e) => e.doctor
+    );
 
-    const validationSchema = object({
+    const validationSchema = object().shape({
         name: string().required("Name is required"),
         password: id
-        ? string().matches(
-              /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
-              "Password must be 8 or more characters"
-          )
-        : string()
-              .required("Password is required")
-              .matches(
+            ? string().matches(
                   /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
                   "Password must be 8 or more characters"
-              ),
+              )
+            : string()
+                  .required("Password is required")
+                  .matches(
+                      /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
+                      "Password must be 8 or more characters"
+                  ),
         password_confirmation: id
-        ? string().oneOf([ref("password")], "Passwords must match")
-        : string()
-              .required("Password confirmation is required")
-              .oneOf([ref("password")], "Passwords must match"),
+            ? string().oneOf([ref("password")], "Passwords must match")
+            : string()
+                  .required("Password confirmation is required")
+                  .oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
         phone_number: string()
             .required("Phone is required")
@@ -91,30 +91,35 @@ export default function AddDoctor() {
         validateOnChange: true,
         validateOnBlur: true,
         onSubmit: (values) => {
-            console.log(values)
+            console.log(values);
             id
                 ? dispatch(updateDoctor({ id, values }))
                 : dispatch(addDoctor(values));
         },
     });
     useEffect(() => {
-        console.log(getDoctorRes.data);
         const newInitialValues = inputTextArr.reduce((acc, e) => {
-            acc[e.id] = getDoctorRes.data ? getDoctorRes.data[e.id] : "";
+            acc[e.id] = getDoctorState.data ? getDoctorState.data[e.id] : "";
             return acc;
-        }, {})
+        }, {});
         formik.setValues(newInitialValues);
-    }, [getDoctorRes]);
+        if (id && getDoctorState.data) {
+            console.log(getDoctorState.data);
+        }
+    }, [getDoctorState]);
+    useEffect(() => {
+        if (newDoctorState.data?.data?.message) {
+            notify(newDoctorState.data.data?.message);
+        }
+    }, [newDoctorState]);
     useEffect(() => {
         if (id) {
             dispatch(getDoctor(id));
-        }else{
-            formik.setValues(initialValues)
         }
     }, []);
     return (
         <div id="add_doctor_cont">
-            <header className="bg-fuchsia-800 h-16 flex justify-between">
+            <header className="bg-fuchsia-900 h-20 flex justify-between">
                 <div
                     id="left-part"
                     className="
@@ -124,7 +129,13 @@ export default function AddDoctor() {
                     justify-around
                     "
                 >
-                    <Link to={`/dashboard/${user.id}`}>
+                    <Link
+                        onClick={() => {
+                            formik.setValues(initialValues);
+                            dispatch(resetGetDoctor());
+                        }}
+                        to={`/dashboard/${user.id}`}
+                    >
                         <img
                             src={leftArrow}
                             alt=""
@@ -169,7 +180,12 @@ export default function AddDoctor() {
                 </div>
             </header>
             <div className="flex flex-wrap flex-col lg:m-20">
-                <div id="form-cont" className="m-5">
+                <div
+                    id="form-cont"
+                    className={`m-5 ${
+                        id ? !getDoctorState.data && "filter blur-sm" : ""
+                    }`}
+                >
                     <div id="input-cont" className="flex flex-wrap">
                         {inputTextArr.map((e, i) => (
                             <InputElement
@@ -192,20 +208,14 @@ export default function AddDoctor() {
                         className="flex align-middle justify-center mt-36 "
                     >
                         <button
-                        disabled= {!formik.isValid || formik.dirty}
                             type="submit"
                             onClick={formik.handleSubmit}
                             className={`
-                                        ${
-                                            formik.dirty ? 
-                                            `bg-fuchsia-800
-                                            lg:hover:bg-fuchsia-600
-                                            lg:active:bg-fuchsia-800
-                                            md:active:scale-95
-                                            md:active:shadow-none`
-                                            : 
-                                            `bg-slate-500`
-                                        }
+                                        bg-fuchsia-800
+                                        lg:hover:bg-fuchsia-600
+                                        lg:active:bg-fuchsia-800
+                                        md:active:scale-95
+                                        md:active:shadow-none
                                         px-14
                                         py-2
                                         rounded-lg
@@ -224,12 +234,12 @@ export default function AddDoctor() {
                         </button>
                     </div>
                     {inputTextArr.map((e, i) =>
-                        formik.errors[e.name] && formik.touched[e.name] ? (
+                        formik.errors[e.id] && formik.touched[e.id] ? (
                             <p
                                 key={i}
                                 className="text-center text-red-600 text-sm mt-3"
                             >
-                                {formik.errors[e.name]}
+                                {formik.errors[e.id]}
                             </p>
                         ) : null
                     )}
