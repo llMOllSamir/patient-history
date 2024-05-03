@@ -118,7 +118,7 @@ export default function AddDoctor() {
                     sm:text-2xl 
                     md:text-4xl"
                     >
-                        Add Doctor
+                        {id ? 'Edit' : 'Add'} Doctor
                     </h1>
                 </div>
                 <div
@@ -131,8 +131,8 @@ export default function AddDoctor() {
                         w-1/3
                     "
                 >
-                    <p className="align-middle text-white text-xs font-normal justify-center">
-                        Doctor's Name
+                    <p className="align-middle text-white text-sm font-normal justify-center">
+                        {user.name}
                     </p>
                     <img
                         src={sample}
