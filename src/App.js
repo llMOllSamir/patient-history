@@ -384,7 +384,7 @@ function App() {
     return (
         <>
             <RouterProvider router={routes} />
-            <ToastContainer />
+            <ToastContainer position="top-center" />
         </>
     );
 }

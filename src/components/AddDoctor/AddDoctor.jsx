@@ -6,51 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 import {
     addDoctor,
     getDoctor,
-    resetGetDoctor,
+    resetDoctor,
     updateDoctor,
 } from "../../store/slices/doctorSlice";
 import { useFormik } from "formik";
 import { object, ref, string } from "yup";
 import { useEffect } from "react";
-import notify from "../../utilities/alert-toastify";
+import { toast } from "react-toastify";
+import { inputTextArr, toastAddDoctor } from "./definations";
 export default function AddDoctor() {
-    const inputTextArr = [
-        {
-            id: "name",
-            name: "name",
-            labelText: "Name",
-            placeholder: "Enter your Name",
-            type: "text",
-        },
-        {
-            id: "password",
-            name: "password",
-            labelText: "Password",
-            placeholder: "Enter your password",
-            type: "password",
-        },
-        {
-            id: "email",
-            name: "email",
-            labelText: "E-mail",
-            placeholder: "Enter your email",
-            type: "email",
-        },
-        {
-            id: "password_confirmation",
-            name: "password_confirmation",
-            labelText: "Confirm password",
-            placeholder: "Confirm your password",
-            type: "password",
-        },
-        {
-            id: "phone_number",
-            name: "phone_number",
-            labelText: "Phone number",
-            placeholder: "Enter your Phone number",
-            type: "tel",
-        },
-    ];
     const initialValues = inputTextArr.reduce((acc, e) => {
         acc[e.id] = "";
         return acc;
@@ -63,22 +27,15 @@ export default function AddDoctor() {
 
     const validationSchema = object().shape({
         name: string().required("Name is required"),
-        password: id
-            ? string().matches(
-                  /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
-                  "Password must be 8 or more characters"
-              )
-            : string()
-                  .required("Password is required")
-                  .matches(
-                      /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
-                      "Password must be 8 or more characters"
-                  ),
-        password_confirmation: id
-            ? string().oneOf([ref("password")], "Passwords must match")
-            : string()
-                  .required("Password confirmation is required")
-                  .oneOf([ref("password")], "Passwords must match"),
+        password: string()
+            .required("Password is required")
+            .matches(
+                /(?:[a-zA-Z0-9] ?){7}[a-zA-Z0-9]$/,
+                "Password must be 8 or more characters"
+            ),
+        password_confirmation: string()
+            .required("Password confirmation is required")
+            .oneOf([ref("password")], "Passwords must match"),
         email: string().email("Invalid email").required("Email is required"),
         phone_number: string()
             .required("Phone is required")
@@ -91,7 +48,6 @@ export default function AddDoctor() {
         validateOnChange: true,
         validateOnBlur: true,
         onSubmit: (values) => {
-            console.log(values);
             id
                 ? dispatch(updateDoctor({ id, values }))
                 : dispatch(addDoctor(values));
@@ -103,15 +59,21 @@ export default function AddDoctor() {
             return acc;
         }, {});
         formik.setValues(newInitialValues);
-        if (id && getDoctorState.data) {
-            console.log(getDoctorState.data);
-        }
     }, [getDoctorState]);
     useEffect(() => {
-        if (newDoctorState.data?.data?.message) {
-            notify(newDoctorState.data.data?.message);
-        }
+        toastAddDoctor(
+            newDoctorState,
+            "doctor has been saved successfully",
+            "the email has already been taken."
+        );
     }, [newDoctorState]);
+    useEffect(() => {
+        toastAddDoctor(
+            updateDoctorState,
+            "doctor has been updated successfully",
+            "the email has already been taken."
+        );
+    }, [updateDoctorState]);
     useEffect(() => {
         if (id) {
             dispatch(getDoctor(id));
@@ -132,7 +94,7 @@ export default function AddDoctor() {
                     <Link
                         onClick={() => {
                             formik.setValues(initialValues);
-                            dispatch(resetGetDoctor());
+                            dispatch(resetDoctor());
                         }}
                         to={`/dashboard/${user.id}`}
                     >
