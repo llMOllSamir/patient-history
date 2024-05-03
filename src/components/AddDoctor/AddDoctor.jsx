@@ -131,14 +131,14 @@ export default function AddDoctor() {
                         w-1/3
                     "
                 >
-                    <p className="align-middle text-white text-sm font-normal justify-center">
+                    <p className="align-middle text-white text-md font-bold justify-center">
                         {user.name}
                     </p>
-                    <img
+                    {/* <img
                         src={sample}
                         className="w-10 ml-5 rounded-full border-2"
                         alt=""
-                    />
+                    /> */}
                 </div>
             </header>
             <div className="flex flex-wrap flex-col lg:m-20">
