@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from "./PatientCervicalCancer.module.css";
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { FiDownload } from 'react-icons/fi';
 
 export default function PatientCervicalCancer() {
   const { id } = useParams()
+  const [file, setFile] = useState(null)
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.auth)
   const onSuccess = (data) => {
