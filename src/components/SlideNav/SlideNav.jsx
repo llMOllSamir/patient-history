@@ -72,7 +72,7 @@ export default function SlideNav() {
       {!isOpen && <div className="h-8 w-8  fixed start-0 z-10 text-white top-5 flex bg-fuchsia-900 rounded-lg   justify-center items-center  md:hidden  ">
         <GrMenu onClick={handleOpen} cursor={"pointer"} size={"1.5rem"} />
       </div>}
-      <aside className={` select-none overflow-auto  h-screen  md:h-auto md:static fixed   z-50   ${isOpen ? "start-0" : "-start-80"} transition-all duration-700     print:hidden min-w-64 md:w-4/12 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white`}>
+      <aside className={` select-none overflow-auto  h-screen  md:h-auto md:static fixed   z-50   ${isOpen ? "start-0" : "-start-80"} transition-all duration-700     print:hidden min-w-72 lg:min-w-80 md:w-4/12 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white`}>
         <div className="h-8 w-8 absolute end-0 top-5 flex justify-center items-center  md:hidden  ">
           <IoMdClose onClick={handleOpen} cursor={"pointer"} size={"1.5rem"} />
         </div>
