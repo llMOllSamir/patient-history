@@ -1,3 +1,4 @@
+
 import React from "react";
 import styles from "./PersonalInformation.module.css";
 import { MdEdit } from "react-icons/md";
@@ -11,6 +12,7 @@ import {
   fixPatientCode,
   setPatientData,
 } from "../../store/slices/patientSlice";
+import NoDataFound from "../NoDataFound/NoDataFound";
 
 export default function PersonalInformation() {
   const { id } = useParams();
@@ -20,8 +22,8 @@ export default function PersonalInformation() {
   const { user } = useSelector((state) => state.auth);
   // fetch data success
   const onSuccess = (data) => {
-    dispatech(fixPatientCode(data.data.patient_code));
-    dispatech(setPatientData(data.data));
+    dispatech(fixPatientCode(data?.data?.patient_code));
+    dispatech(setPatientData(data?.data));
   };
   // fetch data Error
   const onError = (error) => {
@@ -43,7 +45,7 @@ export default function PersonalInformation() {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
         <h2 className="font-bold text-red-500 text-lg md:text-3xl">
-          {error.response.data.error}
+          {error?.response?.data?.error}
         </h2>
         <Link
           onClick={() => {
@@ -58,52 +60,57 @@ export default function PersonalInformation() {
     );
   }
 
-  if (data)
+
+  if (data && Object.keys(data).length === 0) {
+    return <NoDataFound link="personal-information" title="personal information" />
+  }
+
+  if (data && Object.keys(data).length > 0)
     return (
       <React.Fragment>
         <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <ArticalInfo col={2} description={data.name} title={"name"} />
+          <ArticalInfo col={2} description={data?.name} title={"name"} />
 
-          <ArticalInfo description={data.national_id} title={"National ID"} />
+          <ArticalInfo description={data?.national_id} title={"National ID"} />
 
-          <ArticalInfo description={data.patient_code} title={"code"} />
+          <ArticalInfo description={data?.patient_code} title={"code"} />
 
           <ArticalInfo
-            description={data.date_of_birth}
+            description={data?.date_of_birth}
             title={"Date of birth"}
           />
 
-          <ArticalInfo description={data.age.toString()} title={"age"} />
+          <ArticalInfo description={data?.age.toString()} title={"age"} />
 
           <ArticalInfo
-            description={data.marital_state}
+            description={data?.marital_state}
             title={"Marital status"}
           />
 
-          <ArticalInfo description={data.address} title={"Address"} />
+          <ArticalInfo description={data?.address} title={"Address"} />
 
           <h2 className="text-fuchsia-900 my-10 text-2xl font-semibold md:col-span-2">
             Contact Information
           </h2>
 
           <ArticalInfo
-            description={data.phone_number}
+            description={data?.phone_number}
             phone={true}
             title={"Phone number"}
           />
 
           <ArticalInfo
-            description={data.email || "Not Found"}
+            description={data?.email || "Not Found"}
             title={"E-mail"}
           />
 
           <ArticalInfo
-            description={data.relative_phone}
+            description={data?.relative_phone}
             phone={true}
             title={"Home number"}
           />
           <ArticalInfo
-            description={data.relative_name}
+            description={data?.relative_name}
             title={"Relative name"}
           />
         </div>

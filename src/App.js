@@ -34,6 +34,12 @@ import ResetPassword from "./components/ResetPassword/ResetPassword";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import DoctorHistory from "./components/History/DoctorHistory";
 import AddDoctor from "./components/AddDoctor/AddDoctor";
+import PatientUterineCancer from "./components/PatientUterineCancer/PatientUterineCancer";
+import AddUpdateUterineCancer from "./components/PatientUterineCancer/AddUpdateUterineCancer";
+import PatientCervicalCancer from "./components/PatientCervicalCancer/PatientCervicalCancer";
+import CervicalUpdate from "./components/PatientCervicalCancer/CervicalUpdate";
+import CervicalAdd from "./components/PatientCervicalCancer/CervicalAdd";
+
 
 function App() {
     const routes = createBrowserRouter([

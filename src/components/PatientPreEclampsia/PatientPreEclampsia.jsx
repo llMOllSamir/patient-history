@@ -1,32 +1,34 @@
-/* eslint-disable array-callback-return */
+
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import LoadingPatient from "../../LoadingPatient";
 import { FiDownload } from "react-icons/fi";
-import { MdAdd, MdEdit } from "react-icons/md";
-import { getPreEclampsia } from "../../store/slices/preEclampsiaSlice";
+import { MdEdit } from "react-icons/md";
+import { setPreEclampsia } from "../../store/slices/preEclampsiaSlice";
+import NoDataFound from "../NoDataFound/NoDataFound";
+import { useGetPreEclampsia } from "../../hooks/preEclampsia";
 
 export default function PatientPreEclampsia() {
   const { id } = useParams();
   const dispatech = useDispatch();
-  const { preEclampsia, loading, error } = useSelector(
+  const { preEclampsia } = useSelector(
     (state) => state.preEclampsia
   );
+  const { user } = useSelector((state) => state.auth);
+  const onError = (error) => { console.log(error); }
+  const onSuccess = (data) => {
+    dispatech(setPreEclampsia(data.data))
+  }
+  const { error, isError, isLoading } = useGetPreEclampsia({ id, onError, onSuccess })
 
-  useEffect(() => {
-    dispatech(getPreEclampsia({ id: Number(id) })).then((res) => {
-      if (res.payload.id) {
-      }
-    });
-  }, [dispatech, id]);
 
-  if (loading) {
+
+  if (isLoading) {
     return <LoadingPatient />;
   }
 
-  if (error) {
+  if (isError) {
     return (
       <div className="mx-4  text-center h-1/2 items-center justify-center   flex flex-col gap-5  ">
         <h2 className="font-bold text-red-500 text-3xl">{error.data.error}</h2>
@@ -40,69 +42,76 @@ export default function PatientPreEclampsia() {
     );
   }
 
-  if (preEclampsia) {
-    return (
-      <>
-        <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-          <ArticalInfo
-            description={
-              preEclampsia["history_of_pre-eclampsia"] ? "yes" : "no"
-            }
-            title={"history of pre-eclampsia"}
-          />
 
-          <ArticalInfo
-            description={preEclampsia.number_of_pregnancies_with_pe}
-            title={"number of pregnancies with pe"}
-          />
 
-          {preEclampsia.date_of_pregnancies_with_pe &&
-            typeof preEclampsia.date_of_pregnancies_with_pe === "object"
-            ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
-              if (date) {
-                return (
-                  <ArticalInfo
-                    key={index}
-                    description={date}
-                    title={`date of pregnancies with pe #${index + 1}`}
-                  />
-                );
+
+  if (preEclampsia && Object.keys(preEclampsia).length === 0) {
+    return <NoDataFound link="Pre-eclampsia" title="Pre eclampsia" />
+  }
+
+  if (preEclampsia && Object.keys(preEclampsia).length > 0) {
+
+    if (preEclampsia) {
+      return (
+        <>
+          <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
+            <ArticalInfo
+              description={
+                preEclampsia["history_of_pre-eclampsia"] ? "yes" : "no"
               }
-            })
-            : null}
+              title={"history of pre-eclampsia"}
+            />
 
-          <ArticalInfo
-            description={preEclampsia.fate_of_the_pregnancy}
-            title={"fate of the pregnancy"}
-          />
-        </div>
-        <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
-          <Link
-            to={`/patient/Pre-eclampsia/add/`}
-            className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
-          >
-            <MdAdd />
-            Add
-          </Link>
-          <Link
-            to={`/patient/Pre-eclampsia/update/${preEclampsia.patient_id}`}
-            className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
-          >
-            <MdEdit />
-            Edit
-          </Link>
-          <button
-            className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
-            onClick={() => {
-              window.print();
-            }}
-          >
-            <FiDownload />
-            Download a copy
-          </button>
-        </div>
-      </>
-    );
+            <ArticalInfo
+              description={preEclampsia.number_of_pregnancies_with_pe}
+              title={"number of pregnancies with pe"}
+            />
+
+            {preEclampsia.date_of_pregnancies_with_pe &&
+              typeof preEclampsia.date_of_pregnancies_with_pe === "object"
+              ? preEclampsia.date_of_pregnancies_with_pe.map((date, index) => {
+                if (date) {
+                  return (
+                    <ArticalInfo
+                      key={index}
+                      description={date}
+                      title={`date of pregnancies with pe #${index + 1}`}
+                    />
+                  );
+                }
+              })
+              : null}
+
+            <ArticalInfo
+              description={preEclampsia.fate_of_the_pregnancy}
+              title={"fate of the pregnancy"}
+            />
+          </div>
+          <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
+            {
+
+              (user?.role === "doctor" || user?.role === "admin") && <Link
+                to={`/patient/Pre-eclampsia/update`}
+                className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
+              >
+                <MdEdit />
+                Edit
+              </Link>
+            }
+
+            <button
+              className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
+              onClick={() => {
+                window.print();
+              }}
+            >
+              <FiDownload />
+              Download a copy
+            </button>
+          </div>
+        </>
+      );
+    }
   }
 }
 

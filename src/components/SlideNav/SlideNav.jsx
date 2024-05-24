@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
@@ -6,11 +7,16 @@ import { useSelector } from "react-redux";
 import { MdHistory } from "react-icons/md";
 import { QRCodeCanvas } from "qrcode.react";
 import { CiSearch } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
+import { GrMenu } from "react-icons/gr";
 
 export default function SlideNav() {
+  const [isOpen, setOpen] = useState(false)
   const { patientCode, data } = useSelector((state) => state.patient);
-   const { pathname } = useLocation();
-
+  const { pathname } = useLocation();
+  const handleOpen = () => {
+    setOpen(!isOpen)
+  }
   const links = [{
     title: "Search",
     ref: `search`
@@ -58,145 +64,171 @@ export default function SlideNav() {
     },
   ];
 
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
   return (
-    <aside className=" select-none    print:hidden md:w-2/6 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white">
-      {data && !pathname.endsWith("add") ? (
-        <div className="flex justify-center w-full md:3/4 xl:w-5/6 mx-auto flex-col gap-1 items-center my-12">
-          <svgs.Profile />
-          <h2 className="text-2xl font-semibold mt-4">
-            {data.name.split(" ").slice(0, 2).join(" ")}
-          </h2>
-          <p className="text-sm font-normal text-orange-300">{patientCode}</p>
-          <button
-            onClick={printQRCode}
-            type="button"
-            className="text-xs font-medium bg-fuchsia-950 px-5 py-1 rounded-xl text-gray-400"
-          >
-            Print ID card
-          </button>
+    <>
+      {!isOpen && <div className="h-8 w-8  fixed start-0 z-10 text-white top-5 flex bg-fuchsia-900 rounded-lg   justify-center items-center  md:hidden  ">
+        <GrMenu onClick={handleOpen} cursor={"pointer"} size={"1.5rem"} />
+      </div>}
 
-          {patientCode && (
-            <>
-              <QRCodeCanvas
-                id="qr-code"
-                value={encodeURI(
-                  `${window.location.origin}/patient/personal-information/${patientCode}`
-                )}
-                size={100}
-                level={"Q"}
-                className=" hidden"
-              />
-              <PatientCard
-                name={data.name}
-                code={patientCode}
-                age={data.age}
-                phone={data.phone_number}
-                address={data.address}
-              />
-            </>
-          )}
+      <aside className={` select-none overflow-auto  h-screen  md:h-auto md:static fixed   z-50   ${isOpen ? "start-0" : "-start-80"} transition-all duration-700     print:hidden min-w-72 lg:min-w-80 md:w-4/12 xl:w-3/12 2xl:w-1/6 lg:w-3/12 w-2/5 bg-fuchsia-900  text-white`}>
+
+        <div className="h-8 w-8 absolute end-0 top-5 flex justify-center items-center  md:hidden  ">
+          <IoMdClose onClick={handleOpen} cursor={"pointer"} size={"1.5rem"} />
         </div>
-      ) : (
-        <Link to={"/"}>
-          <img
-            className="w-full sm:w-2/4 md:w-2/4 lg:w-3/4 xl:w-3/6 mb-12 mx-auto mt-10"
-            src={logo}
-            alt="logo"
-          />
-        </Link>
-      )}
 
-      <nav className="w-full">
-        <ul className="flex flex-col gap-y-2 items-center justify-start">
-          {links.map((link, index) => (
-            <li
-              className={`py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 sm:px-10`}
-              key={index}
+
+
+        {data && !pathname.endsWith("add") ? (
+          <div className="flex justify-center w-full md:3/4 xl:w-5/6 mx-auto flex-col gap-1 items-center my-12">
+            <svgs.Profile />
+            <h2 className="text-2xl font-semibold mt-4">
+              {data.name.split(" ").slice(0, 2).join(" ")}
+            </h2>
+            <p className="text-sm font-normal text-orange-300">{patientCode}</p>
+            <button
+              onClick={printQRCode}
+              type="button"
+              className="text-xs font-medium bg-fuchsia-950 px-5 py-1 rounded-xl text-gray-400"
             >
-              <NavLink
-                className={`flex justify-start items-center gap-2  ${pathname.split("/").includes(link.ref.split("/")[0]) &&
-                  "active"
-                  } `}
-                to={link.ref}
-              >
-                <link.logo
-                  size={"1.5rem"}
-                  fill={
-                    pathname.split("/").includes(link.ref.split("/")[0])
-                      ? "#773479"
-                      : "white"
-                  }
+              Print ID card
+            </button>
+
+            {patientCode && (
+              <>
+                <QRCodeCanvas
+                  id="qr-code"
+                  value={encodeURI(
+                    `${window.location.origin}/patient/personal-information/${patientCode}`
+                  )}
+                  size={100}
+                  level={"Q"}
+                  className=" hidden"
                 />
-                {link.title}
+                <PatientCard
+                  name={data.name}
+                  code={patientCode}
+                  age={data.age}
+                  phone={data.phone_number}
+                  address={data.address}
+                />
+              </>
+            )}
+          </div>
+        ) : (
+          <Link to={"/"}>
+            <img
+              className="w-full sm:w-2/4 md:w-2/4 lg:w-3/4 xl:w-3/6 mb-12 mx-auto mt-10"
+              src={logo}
+              alt="logo"
+            />
+          </Link>
+        )}
+
+        <nav className="w-full ">
+          <ul className="flex flex-col gap-y-2 items-center justify-start overflow-auto">
+            {links.map((link, index) => (
+              <li
+                className={`py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 sm:px-10`}
+                key={index}
+              >
+                <NavLink
+                  className={`flex justify-start items-center gap-2  ${pathname.split("/").includes(link.ref.split("/")[0]) &&
+                    "active"
+                    } `}
+                  to={link.ref}
+                >
+                  <link.logo
+                    size={"1.5rem"}
+                    fill={
+                      pathname.split("/").includes(link.ref.split("/")[0])
+                        ? "#773479"
+                        : "white"
+                    }
+                  />
+                  {link.title}
+                </NavLink>
+              </li>
+            ))}
+
+            <li className=" flex justify-start  w-full">
+              <ul className="w-full">
+                <p className="block sm:px-10 text-start w-full my-2 font-bold text-xl">
+                  Oncology
+                </p>
+                {oncology.map((link, index) => (
+                  <li
+                    className="md:px-8 lg:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 "
+                    key={index}
+                  >
+                    <NavLink
+                      className={`flex justify-center items-center gap-2 ${pathname.split("/").includes(link.ref.split("/")[0]) &&
+                        "active"
+                        }`}
+                      to={link.ref}
+                    >
+                      <link.logo
+                        fill={pathname.includes(link.ref) ? "#773479" : "white"}
+                      />
+                      {link.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            <li className="sm:px-10  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
+              <NavLink
+                className={`flex justify-start items-center gap-2 ${pathname.includes("osteoporosis") &&
+                  "active"
+                  }`}
+                to={`osteoporosis/${data?.id || ""}`}
+              >
+                <svgs.Osteoporosis
+                  fill={pathname.includes("Osteoporosis") ? "#773479" : "white"}
+                />
+                Osteoporosis
               </NavLink>
             </li>
-          ))}
 
-          <li className=" flex justify-start  w-full">
-            <ul className="w-full">
-              <p className="block sm:px-10 text-start w-full my-2 font-bold text-xl">
-                Oncology
-              </p>
-              {oncology.map((link, index) => (
-                <li
-                  className="md:px-8 lg:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 "
-                  key={index}
-                >
-                  <NavLink
-                    className={`flex justify-center items-center gap-2`}
-                    to={link.ref}
-                  >
-                    <link.logo
-                      fill={pathname.includes(link.ref) ? "#773479" : "white"}
-                    />
-                    {link.title}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </li>
+            <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
+              <NavLink
+                className={`flex justify-start items-center gap-2 ${pathname.includes("Pre-eclampsia") &&
+                  "active"
+                  }`}
+                to={`Pre-eclampsia/${data?.id || ""}`}
+              >
+                <svgs.Eclampsia
+                  fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}
+                />
+                Pre-eclampsia
+              </NavLink>
+            </li>
 
-          <li className="sm:px-10  py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
-            <NavLink
-              className={`flex justify-start items-center gap-2`}
-              to={`Osteoporosis/${data?.id || ""}`}
-            >
-              <svgs.Osteoporosis
-                fill={pathname.includes("Osteoporosis") ? "#773479" : "white"}
-              />
-              Osteoporosis
-            </NavLink>
-          </li>
+            <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-red-900 ">
+              <NavLink
+                className={`flex justify-start items-center gap-2 ${pathname.includes("patient-history") &&
+                  "active"
+                  }`}
+                to={`patient-history/${data?.id || ""}`}
+              >
+                <MdHistory
+                  color={
+                    pathname.includes("patient-history") ? "#773479" : "white"
+                  }
+                  size={"1.5rem"}
+                />
+                patient history
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </>
 
-          <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-fuchsia-900 ">
-            <NavLink
-              className={`flex justify-start items-center gap-2`}
-              to={`Pre-eclampsia/${data?.id || ""}`}
-            >
-              <svgs.Eclampsia
-                fill={pathname.includes("Pre-eclampsia") ? "#773479" : "white"}
-              />
-              Pre-eclampsia
-            </NavLink>
-          </li>
-
-          <li className="sm:px-10 py-2 w-full has-[.active]:bg-white font-medium has-[.active]:text-red-900 ">
-            <NavLink
-              className={`flex justify-start items-center gap-2`}
-              to={`patient-history/${data?.id || ""}`}
-            >
-              <MdHistory
-                color={
-                  pathname.includes("patient-history") ? "#773479" : "white"
-                }
-                size={"1.5rem"}
-              />
-              patient history
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-    </aside>
   );
 }
 

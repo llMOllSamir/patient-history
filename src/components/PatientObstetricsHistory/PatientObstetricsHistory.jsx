@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +7,7 @@ import { FiDownload } from "react-icons/fi";
 import { MdAdd, MdEdit } from "react-icons/md";
 import { useGetObstetrics } from "../../hooks/obstetrics";
 import { setObstetrics } from "../../store/slices/obstetricsSlice";
+import NoDataFound from "../NoDataFound/NoDataFound";
 
 export default function PatientObstetricsHistory() {
   const dispatech = useDispatch();
@@ -37,39 +39,48 @@ export default function PatientObstetricsHistory() {
     );
   }
 
-  return (
-    <>
-      <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
-        <ArticalInfo description={data.data.gravidity} title={"gravidity"} />
 
-        <ArticalInfo description={data.data.parity} title={"parity"} />
 
-        <ArticalInfo description={data.data.abortion} title={"abortion"} />
+  if (data?.data && Object.keys(data?.data).length === 0) {
+    return <NoDataFound link="obstetrics-history" title="obstetrics history" />
+  }
 
-        <ArticalInfo col={2} description={data.data.notes} title={"notes"} />
-      </div>
-      <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
 
-        {user && user.role === "doctor" && <Link
-          to={`/patient/obstetrics-history/update`}
-          className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
-        >
-          <MdEdit />
-          Edit
-        </Link>}
+  if (data?.data && Object.keys(data?.data).length > 0) {
+    return (
+      <>
+        <div className="mx-4 lg:mx-16  grid  grid-cols-1 md:grid-cols-2  gap-5 ">
+          <ArticalInfo description={data.data.gravidity} title={"gravidity"} />
 
-        <button
-          className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
-          onClick={() => {
-            window.print();
-          }}
-        >
-          <FiDownload />
-          Download a copy
-        </button>
-      </div>
-    </>
-  );
+          <ArticalInfo description={data.data.parity} title={"parity"} />
+
+          <ArticalInfo description={data.data.abortion} title={"abortion"} />
+
+          <ArticalInfo col={2} description={data.data.notes} title={"notes"} />
+        </div>
+        <div className="flex print:hidden gap-x-8 gap-y-4 justify-end md:flex-row flex-col my-10  items-end md:items-center me-16">
+
+          {user && user.role === "doctor" && <Link
+            to={`/patient/obstetrics-history/update`}
+            className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
+          >
+            <MdEdit />
+            Edit
+          </Link>}
+
+          <button
+            className="rounded-lg text-white bg-fuchsia-900 flex gap-4 px-10 py-2"
+            onClick={() => {
+              window.print();
+            }}
+          >
+            <FiDownload />
+            Download a copy
+          </button>
+        </div>
+      </>
+    );
+  }
 }
 
 

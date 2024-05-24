@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import styles from "./AddPatient.module.css";
 import { useFormik } from 'formik';
@@ -6,9 +7,11 @@ import { useAddPatient } from '../../hooks/patient';
 import { ImSpinner6 } from "react-icons/im";
 import notify from '../../utilities/alert-toastify';
 import { useNavigate } from 'react-router-dom';
+import FileUploader from '../FileUploader/FileUploader';
 
 export default function AddPatient() {
   const navigate = useNavigate()
+  const [file, setFile] = useState(null)
 
   const onSuccess = (data) => {
     notify("Patient Added", "success")
@@ -88,6 +91,8 @@ export default function AddPatient() {
 
       </div>
 
+
+
       <div className='flex print:hidden gap-x-8 gap-y-4 justify-end  md:flex-row flex-col my-10  items-end md:items-center me-16'>
         <button type='submit' className='rounded-lg text-white  bg-fuchsia-900 flex text-base md:text-xl font-medium gap-4 px-20 py-2'>
           {isLoading ? <ImSpinner6 className='animate-spin ' size={"1.6rem"} /> : "Add"}
@@ -101,6 +106,7 @@ export default function AddPatient() {
 const InputInfo = ({ title, name, form, type = "text", col }) => {
 
   return <div className={`flex flex-col font-medium gap-1  capitalize ${col && `md:col-span-${col}`}`}>
+
     <label htmlFor={name} className='text-base '>{title}</label>
     {form.errors[name] && form.touched[name] && <p className='text-red-600 text-sm font-semibold'>{form.errors[name]}</p>}
     <input
@@ -112,5 +118,8 @@ const InputInfo = ({ title, name, form, type = "text", col }) => {
       onChange={form.handleChange}
       className={`border outline-none px-5 py-1 border-gray-500 placeholder:text-gray-500  rounded-lg ${col ? "xl:w-1/4 lg:1/2" : "xl:w-1/2 "} w-full `}
       placeholder={`Insert ${title}`} />
+
+
   </div>
+
 }

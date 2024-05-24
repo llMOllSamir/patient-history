@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Home.module.css";
 import { useFormik } from "formik";
-import { number, object } from "yup";
+import { number, object, string } from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
 import { VscDiffAdded } from "react-icons/vsc";
@@ -29,11 +29,30 @@ export default function Home() {
   };
   const { refetch } = useLogout({ onSuccess });
 
-  // vaidation schema
-  const validationSchema = object({
-    search: number("Code must be a number").required("Code is required").min(1),
-  });
+  const [condition, setCondition] = useState(false);
+  const firstRender = useRef(true); // Ref to track first render
 
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return; // Skip the condition update on first render
+    }
+
+    // Update condition state based on user role
+    setCondition(user && (user.role === "doctor" || user.role === "admin"));
+  }, [user]);
+
+  // Validation schema
+  const validationSchema = object({
+    search: string()
+      .matches(
+        condition ? /^.{5}$|^.{14}$/ : /^.{5}$/,
+        condition
+          ? "Code must be either 5 or 14 characters long"
+          : "Code must be 5 characters long"
+      )
+      .required("Code is required"),
+  });
   // handle form
   const formik = useFormik({
     initialValues: {
@@ -158,7 +177,11 @@ export default function Home() {
               type="text"
               id="search"
               className="  rounded-s-xl text-black grow outline-none text-xl py-2 px-5"
-              placeholder="Enter patient code"
+              placeholder={
+                user && (user.role === "doctor" || user.role === "admin")
+                  ? "Enter patient code or national id"
+                  : "Enter patient code"
+              }
             />
             <div className="px-10 flex justify-center items-center">
               {" "}
