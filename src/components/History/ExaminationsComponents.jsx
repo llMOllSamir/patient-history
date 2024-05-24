@@ -1,3 +1,4 @@
+
 import styles from "./PatientHistory.module.css";
 
 export const PersonalInformation = ({ data }) => {

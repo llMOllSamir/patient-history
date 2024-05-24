@@ -1,4 +1,4 @@
-/* eslint-disable array-callback-return */
+
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,3 +1,4 @@
+
 import React from 'react'
 import logo from "./assets/images/logo-white.svg"
 export default function LoadingPatient() {
@@ -7,3 +8,4 @@ export default function LoadingPatient() {
         </div>
     )
 }
+

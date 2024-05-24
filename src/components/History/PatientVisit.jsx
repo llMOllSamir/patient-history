@@ -12,7 +12,7 @@ import {
   Uterine,
 } from "./ExaminationsComponents";
 
-export default function Visit({ data, setIndex, type }) {
+export default function Visit({ data, setIndex }) {
   const examinations = [
     {
       title: "Personal Information",
@@ -73,7 +73,7 @@ export default function Visit({ data, setIndex, type }) {
   };
   return (
     <>
-      <div className="mx-4 lg:mx-16 grid grid-cols-1 md:grid-cols-4 gap-5 mb-10 mt-5">
+      <div className="mx-4 lg:mx-16 grid grid-cols-1 md:grid-cols-4 gap-5 mb-10">
         <div className={`flex flex-col font-medium gap-1 capitalize`}>
           <label htmlFor={"display"} className="text-base">
             Data To Display
@@ -98,9 +98,7 @@ export default function Visit({ data, setIndex, type }) {
         </div>
         <div className="self-end text-xl text-center">{data.date}</div>
         <div className="self-end text-xl capitalize text-center">
-          {type === "doctor"
-            ? `DR.${data.doctor_name}`
-            : `${data.patient_name}`}
+          DR.{data.doctor_name}
         </div>
         <div className="self-end flex justify-center md:self-end">
           <button

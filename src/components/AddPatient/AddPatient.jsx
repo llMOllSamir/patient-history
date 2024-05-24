@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import styles from "./AddPatient.module.css";
 import { useFormik } from 'formik';
@@ -120,4 +121,5 @@ const InputInfo = ({ title, name, form, type = "text", col }) => {
 
 
   </div>
+
 }

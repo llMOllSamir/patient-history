@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -116,3 +117,4 @@ const ArticalInfo = ({ title, description, col, phone = null }) => {
     </article>
   );
 };
+
