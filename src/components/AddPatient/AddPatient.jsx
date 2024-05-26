@@ -1,17 +1,14 @@
 
-import React, { useEffect, useState } from 'react'
-import styles from "./AddPatient.module.css";
+import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import * as yup from "yup"
 import { useAddPatient } from '../../hooks/patient';
 import { ImSpinner6 } from "react-icons/im";
 import notify from '../../utilities/alert-toastify';
 import { useNavigate } from 'react-router-dom';
-import FileUploader from '../FileUploader/FileUploader';
 
 export default function AddPatient() {
   const navigate = useNavigate()
-  const [file, setFile] = useState(null)
 
   const onSuccess = (data) => {
     notify("Patient Added", "success")

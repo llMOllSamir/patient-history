@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import LoadingPatient from "../../LoadingPatient";
 import { ImSpinner6 } from "react-icons/im";
-import { useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import {
   addPreEclampsia,
@@ -14,7 +13,6 @@ import {
 } from "../../store/slices/preEclampsiaSlice";
 
 export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
-  const { id } = useParams();
   const dispatech = useDispatch();
 
   const validationSchema = yup.object({
@@ -30,7 +28,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
   const { preEclampsia, loading, error } = useSelector(
     (state) => state.preEclampsia
   );
-  const patient = useSelector((state) => state.patient);
+  const { data: patient } = useSelector((state) => state.patient);
 
   const navigate = useNavigate();
   const formik = useFormik({
@@ -54,7 +52,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
         dispatech(
           updatePreEclampsia({
             id: Number(preEclampsia.id),
-            data: { patient_id: id, ...values },
+            data: { patient_id: patient.id, ...values },
           })
         ).then((response) => {
           if (response.payload.examination) {
@@ -81,23 +79,6 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
 
 
 
-  useEffect(() => {
-    // Set initial values for formik after Pre-eclampsia data is fetched
-    if (preEclampsia) {
-      formik.setValues({
-        "history_of_pre-eclampsia": preEclampsia["history_of_pre-eclampsia"]
-          ? "yes"
-          : "no",
-        number_of_pregnancies_with_pe:
-          preEclampsia.number_of_pregnancies_with_pe || "",
-        date_of_pregnancies_with_pe:
-          preEclampsia.date_of_pregnancies_with_pe ||
-          Array.from({ length: 5 }, () => ""),
-        fate_of_the_pregnancy: preEclampsia.fate_of_the_pregnancy || "",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preEclampsia]);
 
   if (loading) {
     return <LoadingPatient />;
@@ -109,7 +90,7 @@ export default function AddUpdatePreEclampsiaHistory({ state = "update" }) {
           something wrong happened
         </h2>
         <Link
-          to={"/Pre-eclampsia"}
+          to={"/patient/Pre-eclampsia/" + patient.id}
           className="bg-fuchsia-900 text-lg px-3 text-white rounded-lg py-2"
         >
           Search With Code

@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Http from "../../fetchingRequest";
 import notify from "../../utilities/alert-toastify";

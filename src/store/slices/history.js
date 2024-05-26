@@ -88,5 +88,5 @@ const historySlice = createSlice({
     });
   },
 });
-
+export const {} = historySlice.actions;
 export default historySlice.reducer;

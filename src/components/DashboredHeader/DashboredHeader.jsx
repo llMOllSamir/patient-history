@@ -1,6 +1,4 @@
-
 import React from 'react'
-import styles from "./DashboredHeader.module.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
@@ -18,7 +16,7 @@ export default function DashboredHeader() {
   return (
     <>
       {user &&
-        <header className='w-full print:hidden grow relative z-50 bg-fuchsia-900 text-white  h-24 mb-10 flex justify-between items-center px-10 gap-5'>
+        <header className='w-full print:hidden grow relative z-40 bg-fuchsia-900 text-white  h-24 mb-10 flex justify-between items-center px-10 gap-5'>
           <Link to={"/"}> <img src={logo} alt='logo' className='w-20 aspect-square' /></Link>
           <div className='flex  gap-5'>
             <h2 className=' capitalize text-lg select-none decoration-2 underline underline-offset-4  font-bold'>Dr.{user?.name.split(" ").slice(0, 2).join(" ") || ""}</h2>
@@ -27,4 +25,3 @@ export default function DashboredHeader() {
         </header>}</>
   )
 }
-

@@ -29,7 +29,7 @@ export default function Layout() {
       getUserData(token)
     }
   }, [token, getUserData])
-  
+
   // check token in local storage 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -37,7 +37,7 @@ export default function Layout() {
     }
   }, [dispatch])
 
-  
+
   return <>
     <Helmet>
       <title>

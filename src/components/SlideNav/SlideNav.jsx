@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo-transparent.svg";
@@ -70,7 +69,7 @@ export default function SlideNav() {
 
   return (
     <>
-      {!isOpen && <div className="h-8 w-8  fixed start-0 z-10 text-white top-5 flex bg-fuchsia-900 rounded-lg   justify-center items-center  md:hidden  ">
+      {!isOpen && <div className="h-8 w-8  fixed start-0 z-50 text-white top-5 flex bg-fuchsia-900 rounded-lg   justify-center items-center  md:hidden  ">
         <GrMenu onClick={handleOpen} cursor={"pointer"} size={"1.5rem"} />
       </div>}
 

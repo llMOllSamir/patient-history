@@ -261,13 +261,7 @@ export default function PatientUterineCancer() {
                   <MdEdit size={"1.5rem"} />
                   Edit
                 </Link>
-                <Link
-                  to={`/patient/uterine/add`}
-                  className="rounded-lg text-white bg-blue-700 flex gap-4 px-10 py-2"
-                >
-                  <MdAdd size={"1.5rem"} />
-                  Add
-                </Link>
+
               </>
             )}
 
